@@ -5,7 +5,6 @@ import ToyProject1.hungrytech.entity.member.Member;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -23,7 +22,7 @@ public class Board extends BaseEntity {
     private String content;
 
     @Column(name = "board_img")
-    private String img;
+    private String imgPath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -33,20 +32,40 @@ public class Board extends BaseEntity {
 
     }
 
-    public Board(String title, String content, String img) {
+    public Board(String title, String content, String imgPath, Member member) {
         this.title = title;
         this.content = content;
-        this.img = img;
+        this.imgPath = imgPath;
+        insertMember(member);
     }
 
-    public static Board createBoard(String title, String content, String img) {
-        return new Board(title, content, img);
+    public static Board createBoard(String title, String content, String imgPath, Member member) {
+        return new Board(title, content, imgPath, member);
     }
 
-    public void insertMember(Member member) {
+    private void insertMember(Member member) {
         this.member =member;
         member.getBoards().add(this);
     }
+
+    /**
+     * Board 제목, 게시글, 이미지 변경
+     */
+    public void changeTitle(String changeTitle) {
+        title = changeTitle;
+    }
+
+    public void changeContent(String changeContent) {
+        content = changeContent;
+    }
+
+    public void changeImg(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+
+
+
 
 
 }

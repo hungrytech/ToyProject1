@@ -47,5 +47,21 @@ public class Member extends BaseEntity {
         return new Member(accountId, accountPw, email, phoneNumber);
     }
 
+    /**
+     * Entity 정보변경
+     */
+    public void changePw(String changePw) {
+        accountPw = changePw;
+    }
+
+    public void changeEmail(String changeEmail) {
+        email = changeEmail;
+    }
+
+    public void changePhoneNumber(String changePhoneNumber) {
+        phoneNumber = changePhoneNumber;
+    }
+
+
 
 }

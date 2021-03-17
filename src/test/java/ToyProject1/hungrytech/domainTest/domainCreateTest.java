@@ -36,9 +36,7 @@ public class domainCreateTest {
                 "010-1100-0111");
         Board board = Board.createBoard("첫 게시글 제목",
                 "안녕하세요 첫 게시글 입니다.",
-                null);
-
-        board.insertMember(member);
+                null, member);
         em.persist(member);
         em.persist(board);
         //when
@@ -58,9 +56,7 @@ public class domainCreateTest {
                 "010-1100-0111");
         Board board = Board.createBoard("첫 게시글 제목",
                 "안녕하세요 첫 게시글 입니다.",
-                null);
-
-        board.insertMember(member);
+                null, member);
         em.persist(member);
         em.persist(board);
         //when
