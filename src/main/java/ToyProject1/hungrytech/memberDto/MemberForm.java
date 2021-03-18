@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter @Setter
 public class MemberForm {
 
+    private String name;
+
     private String accountId;
 
     private String accountPw;
@@ -15,6 +17,7 @@ public class MemberForm {
     private String phoneNumber;
 
     private boolean duplicationCheck;
+
 
 
 }

@@ -2,6 +2,7 @@ package ToyProject1.hungrytech.entity.member;
 
 import ToyProject1.hungrytech.entity.BaseEntity;
 import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.memberDto.MemberForm;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -15,6 +16,9 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(name = "member_name", nullable = false, length = 20)
+    private String name;
+
     @Column(name = "account_id", nullable = false, unique = true)
     private String accountId;
 
@@ -24,7 +28,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number", nullable = false, length = 13)
     private String phoneNumber;
 
     @OneToMany(mappedBy = "member")
@@ -34,7 +38,8 @@ public class Member extends BaseEntity {
 
     }
 
-    public Member(String accountId, String accountPw, String email, String phoneNumber) {
+    public Member(String name, String accountId, String accountPw, String email, String phoneNumber) {
+        this.name = name;
         this.accountId = accountId;
         this.accountPw = accountPw;
         this.email = email;
@@ -43,8 +48,12 @@ public class Member extends BaseEntity {
 
 
 
-    public static Member createMember(String accountId, String accountPw, String email, String phoneNumber) {
-        return new Member(accountId, accountPw, email, phoneNumber);
+    public static Member createMember(MemberForm memberForm) {
+        return new Member(memberForm.getName(),
+                memberForm.getAccountId(),
+                memberForm.getAccountPw(),
+                memberForm.getEmail(),
+                memberForm.getPhoneNumber());
     }
 
     /**

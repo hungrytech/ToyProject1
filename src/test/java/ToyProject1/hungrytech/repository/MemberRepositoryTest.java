@@ -2,6 +2,7 @@ package ToyProject1.hungrytech.repository;
 
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.memberDto.MemberForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,18 @@ public class MemberRepositoryTest {
     @DisplayName("회원 폰번호 변경 테스트")
     public void MemberPhoneNumberChange() {
         //given
-        Member member = Member.createMember("UserA",
-                passwordEncoder.encode("sfdfd"),
-                "user@naver.com",
-                "010-1521-1622");
+        MemberForm memberForm = new MemberForm();
+        memberForm.setName("유저1");
+        memberForm.setAccountId("user1");
+        memberForm.setAccountPw("1234");
+        memberForm.setEmail("user1@gmail.com");
+        memberForm.setPhoneNumber("010-1110-1111");
+
+        //패스워드 암호화
+        memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
+
+        Member member = Member.createMember(memberForm);
+
         memberRepository.save(member);
 
         //when
@@ -55,10 +64,17 @@ public class MemberRepositoryTest {
     @DisplayName("회원 pw 변경 테스트")
     public void MemberPwChange() {
         //given
-        Member member = Member.createMember("UserB",
-                passwordEncoder.encode("sfdfd"),
-                "userB@naver.com",
-                "010-1521-1622");
+        MemberForm memberForm = new MemberForm();
+        memberForm.setName("유저1");
+        memberForm.setAccountId("user1");
+        memberForm.setAccountPw("1234");
+        memberForm.setEmail("user1@gmail.com");
+        memberForm.setPhoneNumber("010-1110-1111");
+
+        //패스워드 암호화
+        memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
+
+        Member member = Member.createMember(memberForm);
 
         memberRepository.save(member);
         //when
@@ -68,7 +84,7 @@ public class MemberRepositoryTest {
             findMember = optionalMember.get();
         }
         findMember.changePw(passwordEncoder.encode("ggggg"));
-        String accountPw = findMember.getAccountPw();
+        String accountPw = member.getAccountPw();
 
         //then
         assertThat(passwordEncoder.matches("ggggg", accountPw)).isTrue();
@@ -78,10 +94,17 @@ public class MemberRepositoryTest {
     @DisplayName("회원 email 변경 테스트")
     public void MemberEmailChange() {
         //given
-        Member member = Member.createMember("UserC",
-                passwordEncoder.encode("sfdfd"),
-                "userC@naver.com",
-                "010-1521-1622");
+        MemberForm memberForm = new MemberForm();
+        memberForm.setName("유저1");
+        memberForm.setAccountId("user1");
+        memberForm.setAccountPw("1234");
+        memberForm.setEmail("user1@gmail.com");
+        memberForm.setPhoneNumber("010-1110-1111");
+
+        //패스워드 암호화
+        memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
+
+        Member member = Member.createMember(memberForm);
 
         memberRepository.save(member);
         //when
@@ -93,17 +116,24 @@ public class MemberRepositoryTest {
         findMember.changeEmail("change@naver.com");
 
         //then
-        assertThat(findMember.getEmail()).isEqualTo("change@naver.com");
+        assertThat(member.getEmail()).isEqualTo("change@naver.com");
 
     }
 
     @Test
     @DisplayName("accountId로 회원 조회")
     public void findByAccountId() {
-        Member member = Member.createMember("userId",
-                passwordEncoder.encode("sdfd"),
-                "userB@naver.com",
-                "010-2422-4444");
+        MemberForm memberForm = new MemberForm();
+        memberForm.setName("유저1");
+        memberForm.setAccountId("user1");
+        memberForm.setAccountPw("1234");
+        memberForm.setEmail("user1@gmail.com");
+        memberForm.setPhoneNumber("010-1110-1111");
+
+        //패스워드 암호화
+        memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
+
+        Member member = Member.createMember(memberForm);
 
         memberRepository.save(member);
 
@@ -112,36 +142,6 @@ public class MemberRepositoryTest {
         assertThat(findMember).isSameAs(member);
     }
 
-    @Test
-    @DisplayName("해당 회원이쓴 게시글들을 모두 조회")
-    public void findMemberAndBoard() {
-        //given
-        Member member = Member.createMember("userD",
-                passwordEncoder.encode("abcd1"),
-                "user@gmail.com",
-                "010-1234-1234");
-
-        Board board1 = Board.createBoard("제목1",
-                "게시글1",
-                "C:",
-                member);
-        Board board2 = Board.createBoard("제목2",
-                "게시글2",
-                "C:",
-                member);
-        memberRepository.save(member);
-        boardRepository.save(board1);
-        boardRepository.save(board2);
-
-        //when
-        Member findMember = memberRepository.findMemberAndBoard("userD");
-        List<Board> boards = member.getBoards();
-
-        //then
-        assertThat(boards.size()).isEqualTo(2);
-
-
-    }
 
 
 }

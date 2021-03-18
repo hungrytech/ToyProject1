@@ -37,12 +37,8 @@ public class MemberService {
         return memberRepository.findMemberByAccountId(accountId);
     }
 
-    //회원이 등록한 게시물 조회
-    public List<Board> findWriteBoard(String accountId) {
-        Member findMember = memberRepository.findMemberAndBoard(accountId);
-        return findMember.getBoards();
-    }
 
 
+    //
 
 }
