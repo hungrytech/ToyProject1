@@ -22,6 +22,7 @@ public class MemberService {
 
     /**
      * 회원 가입, 탈퇴
+     * 아이디 증복 조회
      */
     //회원가입
     @Transactional
@@ -29,6 +30,11 @@ public class MemberService {
         memberRepository.save(member);
 
     }
+    //아이디 증복 조회
+    public Optional<Member> checkId(String accountId) {
+        return memberRepository.findCheckByAccountId(accountId);
+    }
+    
 
     //회원 탈퇴
     @Transactional

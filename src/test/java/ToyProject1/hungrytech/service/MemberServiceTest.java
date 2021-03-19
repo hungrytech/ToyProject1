@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -158,6 +159,17 @@ public class MemberServiceTest {
         assertThat(member1).isNotNull();
 
         assertThat(member2).isNull();
+
+
+    }
+
+    @Test
+    @DisplayName("로그인 증복Id check 테스트")
+    public void test() throws Exception {
+
+        Optional<Member> optionalMember = memberService.checkId("user1");
+
+        assertThat(optionalMember).isNotNull();
 
 
     }

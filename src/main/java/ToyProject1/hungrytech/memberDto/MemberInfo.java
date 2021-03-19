@@ -1,9 +1,12 @@
 package ToyProject1.hungrytech.memberDto;
 
+import ToyProject1.hungrytech.entity.member.Member;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
+@NoArgsConstructor
 public class MemberInfo {
 
     private String name;
@@ -16,5 +19,12 @@ public class MemberInfo {
 
     private String phoneNumber;
 
+    public MemberInfo(Member member) {
+        name = member.getName();
+        accountId = member.getAccountId();
+        accountPw = member.getAccountPw();
+        email = member.getEmail();
+        phoneNumber = member.getPhoneNumber();
 
+    }
 }
