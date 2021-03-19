@@ -1,14 +1,18 @@
 package ToyProject1.hungrytech.entity.board;
 
+import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.entity.BaseEntity;
 import ToyProject1.hungrytech.entity.member.Member;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "board_id")
@@ -28,19 +32,16 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    protected Board() {
 
-    }
-
-    public Board(String title, String content, String imgPath, Member member) {
-        this.title = title;
-        this.content = content;
-        this.imgPath = imgPath;
+    public Board(BoardForm boardForm, Member member) {
+        this.title = boardForm.getTitle();
+        this.content = boardForm.getContent();
+        this.imgPath = boardForm.getImgPath();
         insertMember(member);
     }
 
-    public static Board createBoard(String title, String content, String imgPath, Member member) {
-        return new Board(title, content, imgPath, member);
+    public static Board createBoard(BoardForm boardForm, Member member) {
+        return new Board(boardForm, member);
     }
 
     private void insertMember(Member member) {

@@ -3,7 +3,9 @@ package ToyProject1.hungrytech.entity.member;
 import ToyProject1.hungrytech.entity.BaseEntity;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.memberDto.MemberForm;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "member_id")
@@ -34,9 +37,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Board> boards= new ArrayList<>();
 
-    protected Member() {
 
-    }
 
     public Member(String name, String accountId, String accountPw, String email, String phoneNumber) {
         this.name = name;
