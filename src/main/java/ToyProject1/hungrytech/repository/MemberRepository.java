@@ -17,7 +17,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findLoginCheckByAccountId(@Param("accountId") String accountId);
 
 
-
+    /**
+     * 아이디 증복조회
+     */
+    Optional<Member> findCheckByAccountId(@Param("accountId") String accountId);
 
 
     /**
