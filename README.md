@@ -21,5 +21,6 @@
 ## 사용기술
 * Spring boot
 * Spring Data JPA
+* Thymeleaf
 * BootStrap4
 
