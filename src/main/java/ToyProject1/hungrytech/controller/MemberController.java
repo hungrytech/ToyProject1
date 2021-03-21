@@ -55,7 +55,7 @@ public class MemberController {
 
     }
 
-    @GetMapping("/logoutForm")
+    @GetMapping("/logoutPage")
     public String logout() {
         session.invalidate();
         return "logout/logout_success";
