@@ -21,13 +21,12 @@ public class MemberController {
 
     @GetMapping("/loginForm")
     public String login(Model model) {
-        model.addAttribute("memberLoginForm",new MemberLoginForm());
+        model.addAttribute("memberLoginForm", new MemberLoginForm());
         return "login/loginPage";
     }
 
     @PostMapping("/login_pro")
-    public String login_pro(MemberLoginForm loginForm) {
-        System.out.println("loginForm = " + loginForm.getAccountId());
+    public String login_pro(MemberLoginForm loginForm, Model model) {
         Member result = memberService.login(loginForm);
 
         if(result!=null) {
@@ -39,8 +38,11 @@ public class MemberController {
             return "login/login_success";
         }
 
+        String loginfailMessage = "아이디 혹은 암호가 올바르지 않습니다.";
+        model.addAttribute("failMessage", loginfailMessage);
+
         //id 저장 처리
-        if(loginForm.isSaveId()==true) {
+        if(loginForm.isSaveId()) {
             loginForm.setAccountPw("");
             return "login/loginPage";
         }
