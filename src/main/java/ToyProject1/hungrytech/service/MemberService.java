@@ -1,6 +1,7 @@
 package ToyProject1.hungrytech.service;
 
 import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
 import ToyProject1.hungrytech.repository.MemberRepository;
@@ -26,8 +27,9 @@ public class MemberService {
      */
     //회원가입
     @Transactional
-    public void join(Member member) {
-        memberRepository.save(member);
+    public void join(MemberForm memberForm) {
+        memberRepository.save(Member
+                .createMember(memberForm));
 
     }
     //아이디 증복 조회

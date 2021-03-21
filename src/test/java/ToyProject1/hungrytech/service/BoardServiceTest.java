@@ -49,7 +49,6 @@ public class BoardServiceTest {
         memberForm1.setEmail("user1@gmail.com");
         memberForm1.setName("user1");
 
-        Member member = Member.createMember(memberForm1);
 
         //Board
         BoardForm boardForm1 = new BoardForm();
@@ -71,13 +70,15 @@ public class BoardServiceTest {
 
 
         //회원저장
-        memberService.join(member);
+        memberService.join(memberForm1);
+
+        Member findMember = memberService.findInfo(memberForm1.getAccountId());
 
 
         //게시글 작성
-        boardService.writeBoard(boardForm1, member);
-        boardService.writeBoard(boardForm2, member);
-        boardService.writeBoard(boardForm3, member);
+        boardService.writeBoard(boardForm1, findMember);
+        boardService.writeBoard(boardForm2, findMember);
+        boardService.writeBoard(boardForm3, findMember);
 
     }
 

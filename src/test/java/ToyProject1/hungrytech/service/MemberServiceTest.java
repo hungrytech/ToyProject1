@@ -47,9 +47,9 @@ public class MemberServiceTest {
         //패스워드 암호화
         memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
 
-        Member member = Member.createMember(memberForm);
 
-        memberService.join(member);
+
+        memberService.join(memberForm);
     }
 
     @Test
@@ -66,15 +66,16 @@ public class MemberServiceTest {
         //패스워드 암호화
         memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
 
-        Member member = Member.createMember(memberForm);
 
-        memberService.join(member);
+
+        memberService.join(memberForm);
 
         //when
-        Member findMember = memberRepository.findMemberByAccountId(member.getAccountId());
+        Member findMember = memberService.findInfo(memberForm.getAccountId());
 
         //then
-        assertThat(findMember).isSameAs(member);
+        assertThat(findMember).isNotNull();
+
 
     }
 
