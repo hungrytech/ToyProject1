@@ -16,8 +16,8 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @GetMapping("/member/checkIdExist/{accountId}")
-    public MemberInfo checkIdExist(@PathVariable("accountId") String accountId) {
+    @GetMapping("/member/checkIdExist/{id}")
+    public MemberInfo checkIdExist(@PathVariable("id") String accountId) {
         Optional<Member> findMember = memberService.checkId(accountId);
         if(findMember.isPresent()) {
             return new MemberInfo(findMember.get());
