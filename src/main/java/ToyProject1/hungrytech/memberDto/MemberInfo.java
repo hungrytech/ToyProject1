@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MemberInfo {
 
+
     private String name;
 
     private String accountId;
@@ -19,12 +20,15 @@ public class MemberInfo {
 
     private String phoneNumber;
 
-    public MemberInfo(Member member) {
+    private boolean loginCheck = false;
+
+    public void setInfo(Member member) {
         name = member.getName();
         accountId = member.getAccountId();
         accountPw = member.getAccountPw();
         email = member.getEmail();
         phoneNumber = member.getPhoneNumber();
+        loginCheck = true;
 
     }
 }

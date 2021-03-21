@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <nav th:fragment="bodyheader" class="navbar navbar-expand-lg navbar-light bg-info fixed-top">
-    <a class="navbar-brand" href="#">메인화면</a>
+    <a class="navbar-brand" href="/">메인화면</a>
     <button
             class="navbar-toggler"
             type="button"
@@ -15,11 +15,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="#"
+            <li th:if="${session.memberInfo.isLoginCheck()==false}" class="nav-item active">
+                <a class="nav-link" href="/loginForm"
                 >로그인 <span class="sr-only">(current)</span></a
                 >
             </li>
+            <li th:unless="${session.memberInfo.isLoginCheck()==false}" class="nav-item active">
+                <a class="nav-link" href="/logoutForm"
+                >로그아웃 <span class="sr-only">(current)</span></a
+                >
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="#">게시판</a>
             </li>

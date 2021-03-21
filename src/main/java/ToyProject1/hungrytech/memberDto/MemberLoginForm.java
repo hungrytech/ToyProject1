@@ -10,4 +10,6 @@ public class MemberLoginForm {
 
     private String accountPw;
 
+    private boolean saveId = false;
+
 }

@@ -17,11 +17,11 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @GetMapping("/member/checkIdExist/{id}")
-    public MemberInfo checkIdExist(@PathVariable("id") String accountId) {
+    public String checkIdExist(@PathVariable("id") String accountId) {
         Optional<Member> findMember = memberService.checkId(accountId);
         if(findMember.isPresent()) {
-            return new MemberInfo(findMember.get());
+            return true+"";
         }
-        return null;
+        return false+"";
     }
 }
