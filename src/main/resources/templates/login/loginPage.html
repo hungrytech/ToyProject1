@@ -4,6 +4,11 @@
         <meta charset="UTF-8">
         <title>Home</title>
     </head>
+    <style>
+        .failMessage {
+            color: red;
+        }
+    </style>
     <body>
         <!-- 상단 바 -->
         <nav th:replace="fragments/bodyHeader :: bodyheader"/>
@@ -20,6 +25,7 @@
                             class="form-control"
                             aria-describedby="UserHelp"
                             placeholder="Id"
+                            required="required"
                     />
                     <small id="UserHelp" class="form-text text-muted"
                     >We'll never share your Id with anyone else.</small
@@ -32,6 +38,7 @@
                             class="form-control"
                             th:field="*{accountPw}"
                             placeholder="PassWord"
+                            required="required"
                     />
                 </div>
                 <div class="form-group form-check">
@@ -40,6 +47,7 @@
                     >아이디 저장</label
                     >
                 </div>
+                <p th:text="${failMessage}" th:classappend="${failMessage!=null} ? 'failMessage' : ''"></p>
                 <button type="submit" class="btn btn-dark">로그인</button>
                 <a href="#" class="btn btn btn-success">회원가입</a>
             </form>
