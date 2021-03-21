@@ -3,7 +3,7 @@
 ---
 ## 요구사항
 ### 회원
-* 회원가입
+* 회원 등록
 * 로그인, 로그아웃
 * 회원탈퇴
 * 개인정보 조회, 수정
@@ -21,5 +21,6 @@
 ## 사용기술
 * Spring boot
 * Spring Data JPA
+* Thymeleaf
 * BootStrap4
 
