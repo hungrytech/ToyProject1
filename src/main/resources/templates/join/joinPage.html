@@ -5,7 +5,7 @@
         <!-- 상단 바 -->
         <nav th:replace="fragments/bodyHeader :: bodyheader"/>
 
-        <--Content -->
+        <!-- Content -->
         <main class="container d-flex justify-content-center d-flex align-items-center" >
             <form role="form" action="/join_pro" th:object="${memberForm}" id="joinForm" method="post" >
                 <input type="hidden" th:field="*{duplicationCheck}">
@@ -44,7 +44,6 @@
                                 type="password"
                                 class="form-control"
                                 id="passwordConfirm"
-                                value=""
                                 maxlength="13"
                                 placeholder="password확인"
                                 onchange="check_pw()"
@@ -61,7 +60,6 @@
                                 th:field="*{name}"
                                 maxlength="20"
                                 placeholder="name"
-                                required="required"
                         />
                     </div>
                     <div class="form-group col">
@@ -72,7 +70,6 @@
                                 th:field="*{email}"
                                 placeholder="cma@example.com"
                                 maxlength="25"
-                                required="required"
                         />
                     </div>
                 </div>
@@ -84,7 +81,6 @@
                             th:field="*{phoneNumber}"
                             placeholder="핸드폰 번호 숫자로만 입력"
                             maxlength="13"
-                            required="required"
                             onkeyup="inputPhoneNumber(this);"
                     />
                 </div>
@@ -119,28 +115,34 @@
         -->
         <script>
             function inputPhoneNumber(obj) {
-                let number = obj.value.replace(/[^0-9]/g, "");
-                let phone = "";
-                if (number.length < 4) {
-                    return number;
-                } else if (number.length < 7) {
-                    phone += number.substr(0, 3);
-                    phone += "-";
-                    phone += number.substr(3);
-                } else if (number.length < 11) {
-                    phone += number.substr(0, 3);
-                    phone += "-";
-                    phone += number.substr(3, 3);
-                    phone += "-";
-                    phone += number.substr(6);
-                } else {
-                    phone += number.substr(0, 3);
-                    phone += "-";
-                    phone += number.substr(3, 4);
-                    phone += "-";
-                    phone += number.substr(7);
+                let pattern =  /[ㄱ-ㅎ가-힣|a-z|A-Z]/g;
+
+                if(pattern.test(obj.value)){
+                    obj.value="";
+                }else {
+                    let number = obj.value.replace(/[^0-9]/g, "");
+                    let phone = "";
+                    if (number.length < 4) {
+                        return number;
+                    } else if (number.length < 7) {
+                        phone += number.substr(0, 3);
+                        phone += "-";
+                        phone += number.substr(3);
+                    } else if (number.length < 11) {
+                        phone += number.substr(0, 3);
+                        phone += "-";
+                        phone += number.substr(3, 3);
+                        phone += "-";
+                        phone += number.substr(6);
+                    } else {
+                        phone += number.substr(0, 3);
+                        phone += "-";
+                        phone += number.substr(3, 4);
+                        phone += "-";
+                        phone += number.substr(7);
+                    }
+                    obj.value = phone;
                 }
-                obj.value = phone;
             }
 
             function check_pw() {
@@ -153,6 +155,7 @@
                         check.innerText = '비밀번호가 일치합니다.';
                         check.style.color='blue';
                         pwConfirm.value = "true";
+                        pwConfirm.value = pw.value;
                         return;
                     }
                     check.innerText = '비밀번호가 일치하지 않습니다.'
@@ -173,7 +176,7 @@
                     dataType : 'text',
                     success : function(result) {
                         if(result.trim()=='true') {
-                            alert('이미 존재하는 아이디 입니다.');
+                            alert('사용할 수 없는 아이디 입니다.');
                             $("#duplicationCheck").val('false');
 
                         }else {
@@ -187,17 +190,31 @@
             function resultSubmit() {
                 let check = document.getElementById("duplicationCheck");
                 let joinForm = document.getElementById("joinForm");
+                let pw = document.getElementById('accountPw');
                 let pwConfirm = document.getElementById('passwordConfirm');
 
-                console.log(check.value);
-                if(check.value === 'true' && pwConfirm.value === 'true') {
-                    return joinForm.submit();
+                let name = document.getElementById('name').value;
+                let email = document.getElementById('email').value;
+                let phoneNumber = document.getElementById('phoneNumber').value;
+
+                if(check.value !== 'true' && pwConfirm.value !== 'true'){
+                    alert('아이디, 비밀번호를 입력해주세요')
+                    return;
                 }
 
-                if(check.value !== 'true') {
-                    alert("아이디 증복검사를 해야합니다.");
+                if(name !== '' && email !=='' && phoneNumber !== '') {
+                    if(check.value === 'true' && (pw.value ===pwConfirm.value)) {
+                        return joinForm.submit();
+                    }
+
+                    if(check.value !== 'true') {
+                        alert("아이디 증복검사를 해야합니다.");
+                    }else {
+                        alert("비밀번호가 일치하지 않습니다.");
+                    }
+
                 }else {
-                    alert("비밀번호가 일치하지 않습니다.");
+                    alert('필수정보 이름, 이메일, 핸드폰번호를 입력해주세요.' )
                 }
             }
 
