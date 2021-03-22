@@ -28,6 +28,7 @@ public class MemberService {
     //회원가입
     @Transactional
     public void join(MemberForm memberForm) {
+        memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
         memberRepository.save(Member
                 .createMember(memberForm));
 
