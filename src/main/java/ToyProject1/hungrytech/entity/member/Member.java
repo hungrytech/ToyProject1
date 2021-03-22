@@ -22,13 +22,13 @@ public class Member extends BaseEntity {
     @Column(name = "member_name", nullable = false, length = 20)
     private String name;
 
-    @Column(name = "account_id", nullable = false, unique = true)
+    @Column(name = "account_id", nullable = false, unique = true, length = 15)
     private String accountId;
 
     @Column(name = "account_pw", nullable = false)
     private String accountPw;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 25)
     private String email;
 
     @Column(name = "phone_number", nullable = false, length = 13)
