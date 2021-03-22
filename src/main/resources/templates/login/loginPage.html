@@ -14,7 +14,7 @@
         <nav th:replace="fragments/bodyHeader :: bodyheader"/>
 
         <!-- Content -->
-        <div class="container">
+        <main class="container">
             <h2>로그인</h2>
             <form role="form" action="/login_pro" th:object="${memberLoginForm}" method="post">
                 <div class="form-group">
@@ -49,9 +49,9 @@
                 </div>
                 <p th:text="${failMessage}" th:classappend="${failMessage!=null} ? 'failMessage' : ''"></p>
                 <button type="submit" class="btn btn-dark">로그인</button>
-                <a href="#" class="btn btn btn-success">회원가입</a>
+                <a href="/join" class="btn btn btn-success">회원가입</a>
             </form>
-        </div>
+        </main>
 
         <!-- 하단 바 -->
         <footer th:replace="fragments/footer :: footer"/>
