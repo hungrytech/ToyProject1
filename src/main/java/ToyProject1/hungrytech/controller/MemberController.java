@@ -1,6 +1,7 @@
 package ToyProject1.hungrytech.controller;
 
 import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
 import ToyProject1.hungrytech.service.MemberService;
@@ -19,6 +20,10 @@ public class MemberController {
     private final MemberService memberService;
     private final HttpSession session;
 
+    /**
+     * 로그인
+     * 로그아웃
+     */
     @GetMapping("/loginForm")
     public String login(Model model) {
         model.addAttribute("memberLoginForm", new MemberLoginForm());
@@ -59,5 +64,14 @@ public class MemberController {
     public String logout() {
         session.invalidate();
         return "logout/logout_success";
+    }
+
+    /**
+     * 회원가입
+     */
+    @GetMapping("/join")
+    public String join(Model model) {
+        model.addAttribute("memberForm", new MemberForm());
+        return "join/joinPage";
     }
 }
