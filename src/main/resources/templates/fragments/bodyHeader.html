@@ -15,12 +15,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li th:if="${session.memberInfo.isLoginCheck()==false}" class="nav-item active">
+            <li th:if="${session.size()==0}" class="nav-item active">
                 <a class="nav-link" href="/loginForm"
                 >로그인 <span class="sr-only">(current)</span></a
                 >
             </li>
-            <li th:unless="${session.memberInfo.isLoginCheck()==false}" class="nav-item active">
+            <li th:if="${session.size()==0}" class="nav-item active">
+                <a class="nav-link" href="/join"
+                >회원가입 <span class="sr-only">(current)</span></a
+                >
+            </li>
+            <li th:unless="${session.size()==0}" class="nav-item active">
                 <a class="nav-link" href="/logoutPage"
                 >로그아웃 <span class="sr-only">(current)</span></a
                 >
