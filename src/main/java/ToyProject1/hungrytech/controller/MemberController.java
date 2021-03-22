@@ -74,4 +74,10 @@ public class MemberController {
         model.addAttribute("memberForm", new MemberForm());
         return "join/joinPage";
     }
+
+    @PostMapping("/join_pro")
+    public String join_pro(MemberForm memberForm) {
+        memberService.join(memberForm);
+        return "join/join_success";
+    }
 }
