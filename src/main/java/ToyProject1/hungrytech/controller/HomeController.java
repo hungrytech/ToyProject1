@@ -10,15 +10,9 @@ import javax.servlet.http.HttpSession;
 public class HomeController {
 
     @RequestMapping("/")
-    public String main(HttpSession session) {
-
-        if(session.getAttribute("memberInfo")==null) {
-            session.setAttribute("memberInfo", new MemberInfo());
-        }
+    public String main() {
 
         return "home";
     }
-
-
 
 }
