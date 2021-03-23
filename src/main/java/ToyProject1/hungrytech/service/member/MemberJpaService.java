@@ -1,4 +1,4 @@
-package ToyProject1.hungrytech.service;
+package ToyProject1.hungrytech.service.member;
 
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService {
+public class MemberJpaService implements MemberService {
     private final MemberRepository memberRepository;
 
     private final PasswordEncoder passwordEncoder;
@@ -27,6 +27,7 @@ public class MemberService {
      */
     //회원가입
     @Transactional
+    @Override
     public void join(MemberForm memberForm) {
         memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
         memberRepository.save(Member
@@ -34,6 +35,7 @@ public class MemberService {
 
     }
     //아이디 증복 조회
+    @Override
     public Optional<Member> checkId(String accountId) {
         return memberRepository.findCheckByAccountId(accountId);
     }
@@ -41,6 +43,7 @@ public class MemberService {
 
     //회원 탈퇴
     @Transactional
+    @Override
     public void withDrawal(String accountId) {
         Member findMember = memberRepository.findMemberByAccountId(accountId);
         memberRepository.delete(findMember);
@@ -50,6 +53,7 @@ public class MemberService {
      * 로그인
      */
     //로그인
+    @Override
     public Member login(MemberLoginForm loginForm){
         Optional<Member> checkMember = memberRepository
                 .findLoginCheckByAccountId(loginForm.getAccountId());
@@ -71,6 +75,7 @@ public class MemberService {
      * MyPage
      */
     //회원 정보 조회
+    @Override
     public Member findInfo(String accountId) {
         return memberRepository.findMemberByAccountId(accountId);
     }
@@ -78,6 +83,7 @@ public class MemberService {
 
     //회원 정보 변경
     @Transactional
+    @Override
     public void changeInfo(MemberInfo memberInfo) {
         Member findMember = memberRepository.findMemberByAccountId(memberInfo.getAccountId());
 

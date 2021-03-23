@@ -7,6 +7,7 @@ import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
 import ToyProject1.hungrytech.repository.BoardRepository;
 import ToyProject1.hungrytech.repository.MemberRepository;
+import ToyProject1.hungrytech.service.member.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -166,7 +167,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 증복Id check 테스트")
-    public void test() throws Exception {
+    public void loginExistIdTest() {
 
         Optional<Member> optionalMember = memberService.checkId("user1");
 

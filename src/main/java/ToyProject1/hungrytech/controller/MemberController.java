@@ -4,7 +4,7 @@ import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
-import ToyProject1.hungrytech.service.MemberService;
+import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
