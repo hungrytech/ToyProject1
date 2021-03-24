@@ -1,4 +1,4 @@
-package ToyProject1.hungrytech.service;
+package ToyProject1.hungrytech.service.board;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BoardService {
+public class BoardJpaService implements BoardService {
 
     private final BoardRepository boardRepository;
 
@@ -27,6 +27,7 @@ public class BoardService {
      */
     //게시글 작성
     @Transactional
+    @Override
     public void writeBoard(BoardForm boardForm, Member member){
         Board board = Board.createBoard(boardForm, member);
         boardRepository.save(board);
@@ -34,6 +35,7 @@ public class BoardService {
 
     //게시글 수정
     @Transactional
+    @Override
     public void changeBoard(BoardInfo boardInfo, Member member) {
 
         Board board = boardRepository
@@ -48,6 +50,7 @@ public class BoardService {
 
     //게시글 삭제
     @Transactional
+    @Override
     public void deletedBoard(BoardInfo boardInfo) {
         Board findBoard = boardRepository
                 .findBoardById(boardInfo.getId());
@@ -60,6 +63,7 @@ public class BoardService {
      * 게시글 조회
      * 사용자 아이디를 이용한 게시글 조회
      */
+    @Override
     public Page<Board> getBoardList(Pageable pageable) {
 
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
@@ -68,6 +72,7 @@ public class BoardService {
         return boardRepository.findAll(pageable);
     }
 
+    @Override
     public Page<Board> getBoardListByAccountId(String accountId, Pageable pageable) {
 
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);

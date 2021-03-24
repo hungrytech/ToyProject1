@@ -6,6 +6,8 @@ import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.repository.BoardRepository;
+import ToyProject1.hungrytech.service.board.BoardService;
+import ToyProject1.hungrytech.service.member.MemberJpaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,15 +23,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @Transactional
-public class BoardServiceTest {
+public class BoardJpaServiceTest {
     @Autowired
-    MemberService memberService;
+    MemberJpaService memberJpaService;
 
     @Autowired
-    BoardService boardService;
+    BoardService boardService
+            ;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -70,9 +73,9 @@ public class BoardServiceTest {
 
 
         //회원저장
-        memberService.join(memberForm1);
+        memberJpaService.join(memberForm1);
 
-        Member findMember = memberService.findInfo(memberForm1.getAccountId());
+        Member findMember = memberJpaService.findInfo(memberForm1.getAccountId());
 
 
         //게시글 작성
@@ -86,7 +89,7 @@ public class BoardServiceTest {
     @DisplayName("게시글 작성 테스트")
     public void writeBoard() {
         //given
-        Member member = memberService.findInfo("user1");
+        Member member = memberJpaService.findInfo("user1");
 
         BoardForm boardForm = new BoardForm();
         boardForm.setTitle("제목1");
@@ -107,7 +110,7 @@ public class BoardServiceTest {
     @DisplayName("게시글 수정 테스트")
     public void boardChange() {
         //given
-        Member member = memberService.findInfo("user1");
+        Member member = memberJpaService.findInfo("user1");
         List<Board> boards = boardRepository.findAll();
 
         List<BoardInfo> boardInfos = boards.stream()
