@@ -10,8 +10,12 @@ import javax.servlet.http.HttpSession;
 public class HomeController {
 
     @RequestMapping("/")
-    public String main() {
+    public String home() {
 
+        return "redirect:/main";
+    }
+    @RequestMapping("/main")
+    public String main() {
         return "home";
     }
 

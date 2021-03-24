@@ -31,8 +31,7 @@ public class BoardJpaServiceTest {
     MemberJpaService memberJpaService;
 
     @Autowired
-    BoardService boardService
-            ;
+    BoardService boardService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
