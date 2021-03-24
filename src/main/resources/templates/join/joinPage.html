@@ -7,7 +7,7 @@
 
         <!-- Content -->
         <main class="container d-flex justify-content-center d-flex align-items-center" style="margin-top: 80px">
-            <form role="form" action="/member/new" th:object="${memberForm}" id="joinForm" method="post" >
+            <form role="form" th:action="@{/member/new}"  th:object="${memberForm}" id="joinForm" method="post" >
                 <input type="hidden" th:field="*{duplicationCheck}">
                 <div class="row">
                     <div class="form-group col-sm-8">

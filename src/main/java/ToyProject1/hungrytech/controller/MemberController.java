@@ -30,7 +30,7 @@ public class MemberController {
         return "login/loginPage";
     }
 
-    @PostMapping("/login_pro")
+    @PostMapping("/member/login")
     public String login_pro(MemberLoginForm loginForm, Model model) {
         Member result = memberService.login(loginForm);
 

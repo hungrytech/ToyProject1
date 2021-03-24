@@ -16,7 +16,7 @@
         <!-- Content -->
         <main class="container">
             <h2>로그인</h2>
-            <form role="form" action="/login_pro" th:object="${memberLoginForm}" method="post">
+            <form role="form" th:action="@{/member/login}" th:object="${memberLoginForm}" method="post">
                 <div class="form-group">
                     <label th:for="accountId">User Id</label>
                     <input
