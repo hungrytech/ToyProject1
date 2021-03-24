@@ -69,13 +69,13 @@ public class MemberController {
     /**
      * 회원가입
      */
-    @GetMapping("/join")
+    @GetMapping("/member/new")
     public String join(Model model) {
         model.addAttribute("memberForm", new MemberForm());
         return "join/joinPage";
     }
 
-    @PostMapping("/join_pro")
+    @PostMapping("/member/new")
     public String join_pro(MemberForm memberForm) {
         memberService.join(memberForm);
         return "join/join_success";
