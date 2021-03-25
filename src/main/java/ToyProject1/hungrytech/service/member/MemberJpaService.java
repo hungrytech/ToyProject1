@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -87,8 +88,10 @@ public class MemberJpaService implements MemberService {
     public void changeInfo(MemberInfo memberInfo) {
         Member findMember = memberRepository.findMemberByAccountId(memberInfo.getAccountId());
 
-        findMember.changePw(passwordEncoder
-                .encode(memberInfo.getAccountPw()));
+        if(StringUtils.hasText(memberInfo.getAccountPw())) {
+            findMember.changePw(passwordEncoder
+                    .encode(memberInfo.getAccountPw()));
+        }
 
         findMember.changeEmail(memberInfo.getEmail());
 
