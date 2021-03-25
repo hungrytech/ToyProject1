@@ -24,10 +24,11 @@
                 class="btn btn-lg btn btn btn-warning login"
                 href="/loginForm">
           로그인</a>
-        <a th:unless="${session.size()==0}"
-           class="btn btn-lg btn btn-danger"
-           href="#">
-          마이페이지</a>
+        <a
+                th:unless="${session.size()==0}" href="#"
+                th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()})}"
+                class="btn btn-lg btn btn-danger"
+        >마이페이지</a>
         </p>
         <p class="lead">게시판</p>
         <p>

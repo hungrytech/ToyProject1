@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
@@ -34,6 +35,7 @@ public class MemberController {
     public String login_pro(MemberLoginForm loginForm, Model model) {
         Member result = memberService.login(loginForm);
 
+        //로그인 성공
         if(result!=null) {
             MemberInfo memberInfo = new MemberInfo();
             memberInfo.setInfo(result);
@@ -80,4 +82,35 @@ public class MemberController {
         memberService.join(memberForm);
         return "join/join_success";
     }
+    /**
+     * Mypage
+     * 회원정보변경
+     */
+    //회원정보 변경
+    @GetMapping("/member/{id}/edit")
+    public String mypage(@PathVariable("id") String accountId, Model model) {
+
+        Member findMember = memberService.findInfo(accountId);
+
+        MemberInfo info = new MemberInfo();
+        info.setInfo(findMember);
+
+        model.addAttribute("memberInfo", info);
+        return "mypage/mypage";
+    }
+
+    @PostMapping("/member/{id}/edit")
+    public String mypageInfoChange(MemberInfo memberInfo, Model model) {
+
+        memberService.changeInfo(memberInfo);
+
+        MemberInfo sessionMemberInfo = (MemberInfo)session.getAttribute("memberInfo");
+        sessionMemberInfo.changeInfo(memberInfo);
+
+
+        return "memberInfoChange/infochange_success";
+    }
+
+
+
 }
