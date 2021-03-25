@@ -25,10 +25,14 @@ public class MemberInfo {
     public void setInfo(Member member) {
         name = member.getName();
         accountId = member.getAccountId();
-        accountPw = member.getAccountPw();
         email = member.getEmail();
         phoneNumber = member.getPhoneNumber();
         loginCheck = true;
 
+    }
+
+    public void changeInfo(MemberInfo memberInfo) {
+        email = memberInfo.getEmail();
+        phoneNumber = memberInfo.getPhoneNumber();
     }
 }
