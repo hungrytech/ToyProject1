@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
@@ -16,7 +15,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
      *게시물 조회
      */
     //회원 이름으로 게시판 게시물 검색
-    @Query("select b from Board b join b.member m where m.accountId=:accountId")
+    @Query(value = "select b from Board b join fetch b.member m where m.accountId=:accountId",
+            countQuery = "select count(b) from Board b join b.member m where m.accountId=:accountId")
     Page<Board> findBoardsToAccountId(@Param("accountId") String accountId,
                                       Pageable pageable);
 

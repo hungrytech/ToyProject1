@@ -1,12 +1,16 @@
 package ToyProject1.hungrytech.controller;
 
+import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
 import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
+import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpSession;
 public class MemberController {
 
     private final MemberService memberService;
+    private final BoardService boardService;
     private final HttpSession session;
 
     /**
@@ -84,23 +89,43 @@ public class MemberController {
     }
     /**
      * Mypage
-     * 회원정보변경
+     * 회원정보변경, 자신이 쓴 게시글 조회
      */
-    //회원정보 변경
+    //회원정보 변경, 자신이 쓴 게시글 조회
     @GetMapping("/member/{id}/edit")
-    public String mypage(@PathVariable("id") String accountId, Model model) {
+    public String mypage(@PathVariable("id") String accountId,
+                         Model model,
+                         Pageable pageable) {
 
-        Member findMember = memberService.findInfo(accountId);
+        Page<Board> boardPage = boardService.getBoardListByAccountId(accountId, pageable);
 
-        MemberInfo memberInfo = new MemberInfo(
+        if(boardPage.getContent().size() == 0) {
+
+            Member findMember = memberService.findInfo(accountId);
+
+            model.addAttribute("memberInfo", createMemberInfo(findMember));
+            model.addAttribute("boards", boardPage.getContent());
+            return "mypage/mypage";
+        }
+
+        Member findMember = boardPage
+                .getContent()
+                .get(0)
+                .getMember();
+
+        model.addAttribute("memberInfo", createMemberInfo(findMember));
+        model.addAttribute("boards", boardPage.getContent());
+        model.addAttribute("boardPage", boardPage);
+        return "mypage/mypage";
+    }
+
+    private MemberInfo createMemberInfo(Member findMember) {
+        return new MemberInfo(
                 findMember.getName(),
                 findMember.getAccountId(),
                 findMember.getEmail(),
                 findMember.getPhoneNumber()
         );
-
-        model.addAttribute("memberInfo", memberInfo);
-        return "mypage/mypage";
     }
 
     @PostMapping("/member/{id}/edit")

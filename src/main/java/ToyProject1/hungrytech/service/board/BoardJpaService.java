@@ -67,7 +67,7 @@ public class BoardJpaService implements BoardService {
     public Page<Board> getBoardList(Pageable pageable) {
 
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
-        pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdDate"));
+        pageable = PageRequest.of(page, 7, Sort.by(Sort.Direction.DESC, "createdDate"));
 
         return boardRepository.findAll(pageable);
     }
@@ -76,7 +76,7 @@ public class BoardJpaService implements BoardService {
     public Page<Board> getBoardListByAccountId(String accountId, Pageable pageable) {
 
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
-        pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdDate"));
+        pageable = PageRequest.of(page, 7, Sort.by(Sort.Direction.DESC, "createdDate"));
 
         return boardRepository.findBoardsToAccountId(accountId, pageable);
     }

@@ -23,8 +23,8 @@
                                     role="tab"
                                     aria-controls="home"
                                     aria-selected="true"
-                            >개인정보</a
-                            >
+                            >등록한 게시글
+                            </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a
@@ -35,8 +35,8 @@
                                     role="tab"
                                     aria-controls="profile"
                                     aria-selected="false"
-                            >등록한 게시글</a
-                            >
+                            >개인정보
+                            </a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -46,73 +46,81 @@
                                 role="tabpanel"
                                 aria-labelledby="home-tab"
                         >
-                                <form th:action="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()})}" th:object="${memberInfo}" method="post">
-                                    <div class="row">
-                                        <div class="form-group col">
-                                            <label th:for="accountId">Id</label>
-                                            <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    readonly
-                                                    th:field="*{accountId}"
+                            <table class="table table-hover" style="margin-top: 5px">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col" colspan="2" style="text-align: center">제목</th>
+                                    <th scope="col">글쓴이</th>
+                                    <th scope="col">작성일</th>
+                                </tr>
+                                </thead>
+                                <tbody th:if="${boards.size()!=0}">
+                                <tr th:each="board : ${boards}">
+                                    <th scope="row" th:text="${board.getId()}"></th>
+                                    <td colspan="2" th:text="${board.getTitle()}"></td>
+                                    <td th:text="${memberInfo.getAccountId()}"></td>
+                                    <td th:text="${#temporals.format(board.getCreatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <nav aria-label="..."
+                                 th:if="${boards.size()!=0}"
+                                 th:with="
+                                 pageNumber = ${boardPage.getNumber()},
+                                 totalPage = ${boardPage.getTotalPages()},
+                                 start = ${T(Math).floor(pageNumber/7)*7 + 1},
+                                 last = ${start + 6 < totalPage ? start + 6 : totalPage}"
+                            >
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item"
+                                        th:classappend="${boardPage.isFirst()} ?  disabled : ''"
+                                    >
+                                        <a
+                                                class="page-link"
+                                                th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=1)}"
+                                                tabindex="-1"
+                                                aria-disabled="true"
+                                        >First
+                                        </a>
+                                    </li>
+                                    <li class="page-item"
+                                        th:classappend="${boardPage.isFirst()} ?  disabled : ''">
+                                        <a class="page-link"
 
-                                            />
-                                        </div>
-                                        <div class="w-100"></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col">
-                                            <label th:for="accountPw">password</label>
-                                            <input
-                                                    type="password"
-                                                    class="form-control"
-                                                    th:field="*{accountPw}"
-                                                    maxlength="13"
-                                                    placeholder="password 최대 13자리"
-                                            />
-                                        </div>
-                                        <div class="w-100"></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col">
-                                            <label th:for="name">name</label>
-                                            <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    th:field="*{name}"
-                                                    readonly
-                                                    maxlength="20"
-                                                    placeholder="name"
-                                            />
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="form-group col">
-                                            <label th:for="email">email</label>
-                                            <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    th:field="*{email}"
-                                                    maxlength="25"
-                                                    placeholder="cma@example.com"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label th:for="phoneNumber">phonenumber</label>
-                                        <input
-                                                type="text"
-                                                class="form-control"
-                                                th:field="*{phoneNumber}"
-                                                placeholder="핸드폰 번호 숫자로만 입력"
-                                                maxlength="13"
-                                                onkeyup="inputPhoneNumber(this);"
-                                        />
-                                    </div>
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${pageNumber})}"
+                                           aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"
+                                        th:each="page : ${#numbers.sequence(start, last)}"
+                                        th:classappend="${pageNumber+1==page} ? active : ''">
+                                        <a class="page-link"
+                                           th:text="${page}"
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${page})}">
 
-                                    <button type="submit" class="btn btn-primary">
-                                        회원정보 변경
-                                    </button>
-                                </form>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"
+                                        th:classappend="${boardPage.hasNext()} ?  '': disabled">
+                                        <a class="page-link"
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${pageNumber+2})}"
+                                           aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"
+                                        th:classappend="${boardPage.hasNext()} ?  '': disabled"
+                                    >
+                                        <a class="page-link"
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${totalPage})}"
+                                        >
+                                            Last
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                         <div
                                 class="tab-pane fade"
@@ -120,7 +128,74 @@
                                 role="tabpanel"
                                 aria-labelledby="profile-tab"
                         >
-                            ...
+                            <form th:action="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()})}"
+                                  th:object="${memberInfo}" method="post">
+                                <div class="row">
+                                    <div class="form-group col">
+                                        <label th:for="accountId">Id</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                readonly
+                                                th:field="*{accountId}"
+
+                                        />
+                                    </div>
+                                    <div class="w-100"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col">
+                                        <label th:for="accountPw">password</label>
+                                        <input
+                                                type="password"
+                                                class="form-control"
+                                                th:field="*{accountPw}"
+                                                maxlength="13"
+                                                placeholder="password 최대 13자리"
+                                        />
+                                    </div>
+                                    <div class="w-100"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col">
+                                        <label th:for="name">name</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{name}"
+                                                readonly
+                                                maxlength="20"
+                                                placeholder="name"
+                                        />
+                                    </div>
+                                    <div class="w-100"></div>
+                                    <div class="form-group col">
+                                        <label th:for="email">email</label>
+                                        <input
+                                                type="text"
+                                                class="form-control"
+                                                th:field="*{email}"
+                                                maxlength="25"
+                                                placeholder="cma@example.com"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label th:for="phoneNumber">phonenumber</label>
+                                    <input
+                                            type="text"
+                                            class="form-control"
+                                            th:field="*{phoneNumber}"
+                                            placeholder="핸드폰 번호 숫자로만 입력"
+                                            maxlength="13"
+                                            onkeyup="inputPhoneNumber(this);"
+                                    />
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    회원정보 변경
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -152,3 +227,4 @@
         <script src="/js/customMemberForm.js"></script>
     </body>
 </html>
+
