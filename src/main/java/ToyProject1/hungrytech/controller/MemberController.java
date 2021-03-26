@@ -4,6 +4,7 @@ import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
+import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
 import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -37,10 +38,9 @@ public class MemberController {
 
         //로그인 성공
         if(result!=null) {
-            MemberInfo memberInfo = new MemberInfo();
-            memberInfo.setInfo(result);
 
-            session.setAttribute("memberInfo", memberInfo);
+            session.setAttribute("memberInfo",
+                    new MemberLoginInfo(result.getAccountId(), result.getName()));
 
             return "login/login_success";
         }
@@ -92,10 +92,14 @@ public class MemberController {
 
         Member findMember = memberService.findInfo(accountId);
 
-        MemberInfo info = new MemberInfo();
-        info.setInfo(findMember);
+        MemberInfo memberInfo = new MemberInfo(
+                findMember.getName(),
+                findMember.getAccountId(),
+                findMember.getEmail(),
+                findMember.getPhoneNumber()
+        );
 
-        model.addAttribute("memberInfo", info);
+        model.addAttribute("memberInfo", memberInfo);
         return "mypage/mypage";
     }
 
@@ -103,10 +107,6 @@ public class MemberController {
     public String mypageInfoChange(MemberInfo memberInfo, Model model) {
 
         memberService.changeInfo(memberInfo);
-
-        MemberInfo sessionMemberInfo = (MemberInfo)session.getAttribute("memberInfo");
-        sessionMemberInfo.changeInfo(memberInfo);
-
 
         return "memberInfoChange/infochange_success";
     }

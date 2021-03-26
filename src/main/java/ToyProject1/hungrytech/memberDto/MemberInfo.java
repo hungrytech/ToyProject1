@@ -1,6 +1,5 @@
 package ToyProject1.hungrytech.memberDto;
 
-import ToyProject1.hungrytech.entity.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,19 +19,13 @@ public class MemberInfo {
 
     private String phoneNumber;
 
-    private boolean loginCheck = false;
 
-    public void setInfo(Member member) {
-        name = member.getName();
-        accountId = member.getAccountId();
-        email = member.getEmail();
-        phoneNumber = member.getPhoneNumber();
-        loginCheck = true;
-
+    public MemberInfo(String name, String accountId, String email, String phoneNumber) {
+        this.name = name;
+        this.accountId = accountId;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
-    public void changeInfo(MemberInfo memberInfo) {
-        email = memberInfo.getEmail();
-        phoneNumber = memberInfo.getPhoneNumber();
-    }
+
 }
