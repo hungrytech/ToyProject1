@@ -14,13 +14,16 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
      *게시물 검색
      *게시물 조회
      */
-    //회원 이름으로 게시판 게시물 검색
+    //회원 아이디로 게시판 게시물 검색
     @Query(value = "select b from Board b join fetch b.member m where m.accountId=:accountId",
             countQuery = "select count(b) from Board b join b.member m where m.accountId=:accountId")
     Page<Board> findBoardsToAccountId(@Param("accountId") String accountId,
                                       Pageable pageable);
 
-
+    //게시물 조회
+    @Query(value = "select b from Board b join fetch b.member",
+            countQuery = "select count(b) from Board b")
+    Page<Board> findAllBoard(Pageable pageable);
 
 
 

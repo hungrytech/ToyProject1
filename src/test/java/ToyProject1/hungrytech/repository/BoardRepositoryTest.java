@@ -137,7 +137,7 @@ public class BoardRepositoryTest {
 
     @Test
     @DisplayName("해당 회원이 쓴 해당 게시글 조회")
-    public void test() {
+    public void boardAccountSearch() {
         //given
         Member member = memberRepository.findMemberByAccountId("user1");
         List<Board> boards = boardRepository.findAll();
@@ -146,6 +146,27 @@ public class BoardRepositoryTest {
 
         List<Board> memberBoards = member.getBoards();
         assertThat(board).isSameAs(memberBoards.get(0));
+
+
+    }
+
+    @Test
+    @DisplayName("게시글 모두 조회")
+    public void findAllBoard() {
+        //given
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdDate"));
+        Page<Board> boards = boardRepository.findAllBoard(pageRequest);
+
+        //when
+        List<Board> content = boards.getContent();
+        for (Board board : content) {
+            System.out.println("board = " + board.getContent());
+        }
+        //then
+        assertThat(content.size()).isEqualTo(3);
+
+        assertThat(content).extracting("content")
+                .containsExactly("게시글 본문3", "게시글 본문2","게시글 본문1");
 
 
     }
