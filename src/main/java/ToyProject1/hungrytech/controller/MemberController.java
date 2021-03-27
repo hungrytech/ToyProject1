@@ -75,6 +75,7 @@ public class MemberController {
 
     /**
      * 회원가입
+     * 회원탈퇴
      */
     @GetMapping("/member/new")
     public String join(Model model) {
@@ -87,6 +88,15 @@ public class MemberController {
         memberService.join(memberForm);
         return "join/join_success";
     }
+
+    //회원탈퇴
+    @GetMapping("/member/{id}/delete")
+    public String memberDelete(@PathVariable("id") String accountId) {
+        session.invalidate();
+        memberService.withDrawal(accountId);
+        return "withDrawal/withDrawal_success";
+    }
+
     /**
      * Mypage
      * 회원정보변경, 자신이 쓴 게시글 조회

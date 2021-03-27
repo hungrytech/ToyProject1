@@ -34,7 +34,7 @@ public class Member extends BaseEntity {
     @Column(name = "phone_number", nullable = false, length = 13)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Board> boards= new ArrayList<>();
 
 

@@ -191,10 +191,13 @@
                                             onkeyup="inputPhoneNumber(this);"
                                     />
                                 </div>
-
                                 <button type="submit" class="btn btn-primary">
                                     회원정보 변경
                                 </button>
+                                <a class="btn btn-outline-danger"
+                                   th:href="@{/member/{id}/delete(id=${session.memberInfo.getAccountId()})}">
+                                   회원탈퇴
+                                </a>
                             </form>
                         </div>
                     </div>
