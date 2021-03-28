@@ -1,5 +1,6 @@
 package ToyProject1.hungrytech.controller;
 
+import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -114,7 +117,7 @@ public class MemberController {
             Member findMember = memberService.findInfo(accountId);
 
             model.addAttribute("memberInfo", createMemberInfo(findMember));
-            model.addAttribute("boards", boardPage.getContent());
+            model.addAttribute("boards", getBoards(boardPage));
             return "mypage/mypage";
         }
 
@@ -124,9 +127,26 @@ public class MemberController {
                 .getMember();
 
         model.addAttribute("memberInfo", createMemberInfo(findMember));
-        model.addAttribute("boards", boardPage.getContent());
+        model.addAttribute("boards", getBoards(boardPage));
         model.addAttribute("boardPage", boardPage);
         return "mypage/mypage";
+    }
+
+    //회원정보 변경
+    @PostMapping("/member/{id}/edit")
+    public String mypageInfoChange(MemberInfo memberInfo, Model model) {
+
+        memberService.changeInfo(memberInfo);
+
+        return "memberInfoChange/infochange_success";
+    }
+
+    private List<BoardInfo> getBoards(Page<Board> boardPage) {
+        return boardPage
+                .getContent()
+                .stream()
+                .map(BoardInfo::new)
+                .collect(Collectors.toList());
     }
 
     private MemberInfo createMemberInfo(Member findMember) {
@@ -134,16 +154,7 @@ public class MemberController {
                 findMember.getName(),
                 findMember.getAccountId(),
                 findMember.getEmail(),
-                findMember.getPhoneNumber()
-        );
-    }
-
-    @PostMapping("/member/{id}/edit")
-    public String mypageInfoChange(MemberInfo memberInfo, Model model) {
-
-        memberService.changeInfo(memberInfo);
-
-        return "memberInfoChange/infochange_success";
+                findMember.getPhoneNumber());
     }
 
 
