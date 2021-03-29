@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="fragments/header :: header">
-      <meta charset="UTF-8">
-      <title>Home</title>
-  </head>
+  <head th:replace="fragments/header :: header"/>
   <body>
     <!-- 상단 바 -->
     <nav th:replace="fragments/bodyHeader :: bodyheader"/>
@@ -35,11 +32,11 @@
           <a class="btn btn-lg btn btn-dark" href="#">게시판</a>
           <a th:unless="${session.size()==0}"
           class="btn btn-lg btn btn-info"
-          href="#">
+          th:href="@{/board/new}">
             게시글 등록</a>
         </p>
       </div>
-    </main> <!-- /container -->
+    </main>
 
     <!-- 하단 바 -->
     <footer th:replace="fragments/footer :: footer"/>

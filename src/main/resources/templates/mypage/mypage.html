@@ -57,18 +57,21 @@
                                 </thead>
                                 <tbody th:if="${boards.size()!=0}">
                                 <tr th:each="board : ${boards}">
-                                    <th scope="row" th:text="${board.getId()}"></th>
-                                    <td colspan="2" th:text="${board.getTitle()}"></td>
-                                    <td th:text="${memberInfo.getAccountId()}"></td>
-                                    <td th:text="${#temporals.format(board.getCreatedDate(), 'yyyy-MM-dd HH:mm')}"></td>
+                                    <th scope="row" th:text="${board.id}"></th>
+                                    <td colspan="2">
+                                        <a th:text="${board.title}"
+                                           th:href="@{/board/{id}(id=${board.id})}"></a>
+                                    </td>
+                                    <td th:text="${memberInfo.accountId}"></td>
+                                    <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
                                 </tr>
                                 </tbody>
                             </table>
                             <nav aria-label="..."
                                  th:if="${boards.size()!=0}"
                                  th:with="
-                                 pageNumber = ${boardPage.getNumber()},
-                                 totalPage = ${boardPage.getTotalPages()},
+                                 pageNumber = ${boardPage.number},
+                                 totalPage = ${boardPage.totalPages},
                                  start = ${T(Math).floor(pageNumber/7)*7 + 1},
                                  last = ${start + 6 < totalPage ? start + 6 : totalPage}"
                             >
@@ -78,7 +81,7 @@
                                     >
                                         <a
                                                 class="page-link"
-                                                th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=1)}"
+                                                th:href="@{/member/{id}/edit(id=${session.memberInfo.accountId}, page=1)}"
                                                 tabindex="-1"
                                                 aria-disabled="true"
                                         >First
@@ -88,7 +91,7 @@
                                         th:classappend="${boardPage.isFirst()} ?  disabled : ''">
                                         <a class="page-link"
 
-                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${pageNumber})}"
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.accountId}, page=${pageNumber})}"
                                            aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
@@ -98,14 +101,14 @@
                                         th:classappend="${pageNumber+1==page} ? active : ''">
                                         <a class="page-link"
                                            th:text="${page}"
-                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${page})}">
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.accountId}, page=${page})}">
 
                                         </a>
                                     </li>
                                     <li class="page-item"
                                         th:classappend="${boardPage.hasNext()} ?  '': disabled">
                                         <a class="page-link"
-                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${pageNumber+2})}"
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.accountId}, page=${pageNumber+2})}"
                                            aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
@@ -114,7 +117,7 @@
                                         th:classappend="${boardPage.hasNext()} ?  '': disabled"
                                     >
                                         <a class="page-link"
-                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()}, page=${totalPage})}"
+                                           th:href="@{/member/{id}/edit(id=${session.memberInfo.accountId}, page=${totalPage})}"
                                         >
                                             Last
                                         </a>
@@ -128,7 +131,7 @@
                                 role="tabpanel"
                                 aria-labelledby="profile-tab"
                         >
-                            <form th:action="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()})}"
+                            <form th:action="@{/member/{id}/edit(id=${session.memberInfo.accountId})}"
                                   th:object="${memberInfo}" method="post">
                                 <div class="row">
                                     <div class="form-group col">
@@ -195,7 +198,7 @@
                                     회원정보 변경
                                 </button>
                                 <a class="btn btn-outline-danger"
-                                   th:href="@{/member/{id}/delete(id=${session.memberInfo.getAccountId()})}">
+                                   th:href="@{/member/{id}/delete(id=${session.memberInfo.accountId})}">
                                    회원탈퇴
                                 </a>
                             </form>
