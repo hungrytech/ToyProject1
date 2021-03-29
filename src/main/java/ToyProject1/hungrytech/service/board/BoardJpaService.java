@@ -5,6 +5,7 @@ import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.repository.BoardRepository;
+import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardJpaService implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberService memberService;
 
     /**
      * 게시글 작성
@@ -28,18 +30,19 @@ public class BoardJpaService implements BoardService {
     //게시글 작성
     @Transactional
     @Override
-    public void writeBoard(BoardForm boardForm, Member member){
-        Board board = Board.createBoard(boardForm, member);
+    public void writeBoard(BoardForm boardForm, String accountId ){
+        Member findMember = memberService.findInfo(accountId);
+        Board board = Board.createBoard(boardForm, findMember);
         boardRepository.save(board);
     }
 
     //게시글 수정
     @Transactional
     @Override
-    public void changeBoard(BoardInfo boardInfo, Member member) {
+    public void changeBoard(BoardInfo boardInfo, String accountId) {
 
         Board board = boardRepository
-                .findBoard(member.getAccountId(),
+                .findBoard(accountId,
                         boardInfo.getId());
 
         board.changeTitle(boardInfo.getTitle());
@@ -51,12 +54,19 @@ public class BoardJpaService implements BoardService {
     //게시글 삭제
     @Transactional
     @Override
-    public void deletedBoard(BoardInfo boardInfo) {
+    public void deletedBoard(Long boardId) {
         Board findBoard = boardRepository
-                .findBoardById(boardInfo.getId());
+                .findBoardById(boardId);
 
         boardRepository.delete(findBoard);
 
+    }
+    /**
+     * 게시글 단건 조회
+     */
+    @Override
+    public Board findBoardById(Long boardId) {
+        return boardRepository.findBoardById(boardId);
     }
 
     /**
@@ -78,6 +88,6 @@ public class BoardJpaService implements BoardService {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
         pageable = PageRequest.of(page, 7, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-        return boardRepository.findBoardsToAccountId(accountId, pageable);
+        return boardRepository.pagingBoardsToAccountId(accountId, pageable);
     }
 }

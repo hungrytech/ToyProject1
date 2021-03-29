@@ -7,7 +7,7 @@ import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.repository.BoardRepository;
 import ToyProject1.hungrytech.service.board.BoardService;
-import ToyProject1.hungrytech.service.member.MemberJpaService;
+import ToyProject1.hungrytech.service.member.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class BoardJpaServiceTest {
+public class BoardServiceTest {
     @Autowired
-    MemberJpaService memberJpaService;
+    MemberService memberService;
 
     @Autowired
     BoardService boardService;
@@ -72,15 +72,14 @@ public class BoardJpaServiceTest {
 
 
         //회원저장
-        memberJpaService.join(memberForm1);
+        memberService.join(memberForm1);
 
-        Member findMember = memberJpaService.findInfo(memberForm1.getAccountId());
-
+        String accountId = memberForm1.getAccountId();
 
         //게시글 작성
-        boardService.writeBoard(boardForm1, findMember);
-        boardService.writeBoard(boardForm2, findMember);
-        boardService.writeBoard(boardForm3, findMember);
+        boardService.writeBoard(boardForm1, accountId);
+        boardService.writeBoard(boardForm2, accountId);
+        boardService.writeBoard(boardForm3, accountId);
 
     }
 
@@ -88,7 +87,7 @@ public class BoardJpaServiceTest {
     @DisplayName("게시글 작성 테스트")
     public void writeBoard() {
         //given
-        Member member = memberJpaService.findInfo("user1");
+        String accountId = "user1";
 
         BoardForm boardForm = new BoardForm();
         boardForm.setTitle("제목1");
@@ -96,7 +95,7 @@ public class BoardJpaServiceTest {
         boardForm.setImgPath("C:");
 
         //when
-        boardService.writeBoard(boardForm, member);
+        boardService.writeBoard(boardForm, accountId);
 
         List<Board> boards = boardRepository.findAll();
 
@@ -109,7 +108,7 @@ public class BoardJpaServiceTest {
     @DisplayName("게시글 수정 테스트")
     public void boardChange() {
         //given
-        Member member = memberJpaService.findInfo("user1");
+        Member member = memberService.findInfo("user1");
         List<Board> boards = boardRepository.findAll();
 
         List<BoardInfo> boardInfos = boards.stream()
@@ -126,7 +125,7 @@ public class BoardJpaServiceTest {
 
 
 
-        boardService.changeBoard(boardInfo, member);
+        boardService.changeBoard(boardInfo, member.getAccountId());
 
         //then
         List<Board> result = boardRepository.findAll();
@@ -136,7 +135,7 @@ public class BoardJpaServiceTest {
     }
 
     @Test
-    @DisplayName("게시물 삭제 테스트")
+    @DisplayName("게시물 삭제 테스트 CrudReposytory에서 제공하는 메서드로 테스트시 delete가 안된다.")
     public void deletedBoard() {
         //given
         List<Board> boards = boardRepository.findAll();
@@ -146,7 +145,7 @@ public class BoardJpaServiceTest {
                 .collect(Collectors.toList());
         //when
         for (BoardInfo boardInfo : boardInfos) {
-            boardService.deletedBoard(boardInfo);
+            boardService.deletedBoard(boardInfo.getId());
         }
 
         List<Board> result = boardRepository.findAll();

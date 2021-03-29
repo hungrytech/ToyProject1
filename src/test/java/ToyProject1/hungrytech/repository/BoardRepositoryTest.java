@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,6 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 public class BoardRepositoryTest {
 
     @Autowired
@@ -81,8 +79,6 @@ public class BoardRepositoryTest {
     }
 
 
-
-
     @Test
     @DisplayName("board title 변경 테스트")
     public void BoardTitleChange() {
@@ -97,7 +93,7 @@ public class BoardRepositoryTest {
         Optional<Board> boardOptional = boardRepository.findById(board.getId());
         Board findBoard = null;
 
-        if(boardOptional.isPresent()) {
+        if (boardOptional.isPresent()) {
             findBoard = boardOptional.get();
         }
 
@@ -111,15 +107,15 @@ public class BoardRepositoryTest {
 
     @Test
     @DisplayName("해당 회원이 작성한 게시물을 페이징 하여 가져온다")
-    public void PageingBoards(){
+    public void pageingBoards() {
         //given
         List<Board> boards = boardRepository.findAll();
 
         Member member = boards.get(0).getMember();
 
         //when
-        PageRequest pageRequest = PageRequest.of(0,2, Sort.by(Sort.Direction.DESC, "createdDate"));
-        Page<Board> page = boardRepository.findBoardsToAccountId(member.getAccountId(), pageRequest);
+        PageRequest pageRequest = PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "createdDate"));
+        Page<Board> page = boardRepository.pagingBoardsToAccountId(member.getAccountId(), pageRequest);
 
         //then
 
@@ -142,8 +138,10 @@ public class BoardRepositoryTest {
         Member member = memberRepository.findMemberByAccountId("user1");
         List<Board> boards = boardRepository.findAll();
 
+        //when
         Board board = boardRepository.findBoard(member.getAccountId(), boards.get(0).getId());
 
+        //then
         List<Board> memberBoards = member.getBoards();
         assertThat(board).isSameAs(memberBoards.get(0));
 
@@ -155,7 +153,7 @@ public class BoardRepositoryTest {
     public void findAllBoard() {
         //given
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdDate"));
-        Page<Board> boards = boardRepository.findAllBoard(pageRequest);
+        Page<Board> boards = boardRepository.pagingBoards(pageRequest);
 
         //when
         List<Board> content = boards.getContent();
@@ -166,11 +164,34 @@ public class BoardRepositoryTest {
         assertThat(content.size()).isEqualTo(3);
 
         assertThat(content).extracting("content")
-                .containsExactly("게시글 본문3", "게시글 본문2","게시글 본문1");
+                .containsExactly("게시글 본문3", "게시글 본문2", "게시글 본문1");
 
 
     }
 
+    @Test
+    @DisplayName("CrudRepository 에서 제공하는 메서드로는 test가 통과가 안된다")
+    public void boardDelete() {
+
+        //when
+       boardRepository.deleteAll();
+
+        List<Board> findBoards = boardRepository.findAll();
+        //then
+        assertThat(findBoards.size()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("boardid로 해당 맴버 fetch join 테스트")
+    public void findBoardById() throws Exception {
+        //given
+        List<Board> boards = boardRepository.findAll();
+        Board boardById = boardRepository.findBoardById(boards.get(0).getId());
+        //when
+        Member member = boardById.getMember();
+        //then
+        assertThat(member).isNotNull();
+    }
 
 
 }

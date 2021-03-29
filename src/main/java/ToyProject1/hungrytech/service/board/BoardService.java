@@ -16,13 +16,21 @@ public interface BoardService {
      * 게시글 삭제
      */
     //게시글 작성
-    void writeBoard(BoardForm boardForm, Member member);
+    void writeBoard(BoardForm boardForm, String accountId);
 
     //게시글 수정
-    void changeBoard(BoardInfo boardInfo, Member member);
+    void changeBoard(BoardInfo boardInfo, String accountId);
 
     //게시글 삭제
-    void deletedBoard(BoardInfo boardInfo);
+    void deletedBoard(Long boardId);
+
+
+    /**
+     * 게시글 단건 조회
+     */
+    Board findBoardById(Long boardId);
+
+
 
     /**
      * 게시글 조회
