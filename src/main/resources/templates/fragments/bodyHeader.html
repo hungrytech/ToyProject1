@@ -32,7 +32,9 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">게시판</a>
+                <a class="nav-link"
+                   th:href="@{/boards}"
+                >게시판</a>
             </li>
             <li th:unless="${session.size()==0}" class="nav-item">
                 <a class="nav-link" th:href="@{/member/{id}/edit(id=${session.memberInfo.accountId})}">Mypage</a>

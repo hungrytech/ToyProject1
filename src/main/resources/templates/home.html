@@ -29,7 +29,9 @@
         </p>
         <p class="lead">게시판</p>
         <p>
-          <a class="btn btn-lg btn btn-dark" href="#">게시판</a>
+          <a class="btn btn-lg btn btn-dark"
+             th:href="@{/boards}"
+          >게시판</a>
           <a th:unless="${session.size()==0}"
           class="btn btn-lg btn btn-info"
           th:href="@{/board/new}">
