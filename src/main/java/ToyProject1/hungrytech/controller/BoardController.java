@@ -2,11 +2,14 @@ package ToyProject1.hungrytech.controller;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
+import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
 import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.file.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -150,5 +155,28 @@ public class BoardController {
         boardService.deletedBoard(findBoard.getId());
 
         return "board/boardDelete/boardDelete";
+    }
+
+    /**
+     * 게시판
+     */
+    @GetMapping("/boards")
+    public String bulletinBoard(Pageable pageable,
+                                Model model) {
+
+        Page<Board> boardPage = boardService.getBoardList(pageable);
+
+
+        model.addAttribute("boardPage", boardPage);
+        model.addAttribute("boards", getBoardInfoList(boardPage));
+        return "board/bulletinBoard/bulletinBoard";
+    }
+
+    private List<BulletinBoardInfo> getBoardInfoList(Page<Board> boardPage) {
+        return boardPage
+                .getContent()
+                .stream()
+                .map(BulletinBoardInfo::new)
+                .collect(Collectors.toList());
     }
 }
