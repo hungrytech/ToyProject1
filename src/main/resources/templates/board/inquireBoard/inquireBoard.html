@@ -49,6 +49,7 @@
                                     name="file"
                                     id="inputGroupFile01"
                                     aria-describedby="inputGroupFileAddon01"
+                                    accept="image/*"
                                     onchange="readURL(this)"
                             />
                             <label th:text="${boardInfo.imgPath!=null} ? '변경할 사진 업로드' : '사진 업로드'"
