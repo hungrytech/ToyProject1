@@ -28,6 +28,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
 
     /**
+     * 회원
      * 게시물 조회
      * 게시물 수정
      */
