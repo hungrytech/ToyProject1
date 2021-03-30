@@ -73,17 +73,24 @@ public class BoardController {
 
         Board findBoard = boardService.findBoardById(boardId);
 
-        MemberLoginInfo memberInfo = (MemberLoginInfo)session
-                .getAttribute("memberInfo");
+        //로그인 되었을경우
+        if(session.getAttribute("memberInfo") != null) {
+            MemberLoginInfo memberInfo = (MemberLoginInfo) session
+                    .getAttribute("memberInfo");
 
-        //자기 게시물인지 확인
-        boolean result = personalPublication(
-                findBoard.getMember().getAccountId(),
-                memberInfo.getAccountId());
+            //자기 게시물인지 확인
+            boolean result = personalPublication(
+                    findBoard.getMember().getAccountId(),
+                    memberInfo.getAccountId());
 
+            model.addAttribute("boardInfo", new BoardInfo(findBoard));
+            model.addAttribute("result", result);
+            return "board/inquireBoard/inquireBoard";
+        }
+
+        //로그인이 안되있을경우
         model.addAttribute("boardInfo", new BoardInfo(findBoard));
-        model.addAttribute("result", result);
-
+        model.addAttribute("result", false);
         return "board/inquireBoard/inquireBoard";
     }
 
@@ -168,11 +175,11 @@ public class BoardController {
 
 
         model.addAttribute("boardPage", boardPage);
-        model.addAttribute("boards", getBoardInfoList(boardPage));
+        model.addAttribute("boards", getBulletinBoardInfoList(boardPage));
         return "board/bulletinBoard/bulletinBoard";
     }
 
-    private List<BulletinBoardInfo> getBoardInfoList(Page<Board> boardPage) {
+    private List<BulletinBoardInfo> getBulletinBoardInfoList(Page<Board> boardPage) {
         return boardPage
                 .getContent()
                 .stream()
