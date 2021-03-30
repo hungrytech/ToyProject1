@@ -186,4 +186,16 @@ public class BoardController {
                 .map(BulletinBoardInfo::new)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/boards/write")
+    public String bulletinBoardWrite(HttpSession session) {
+        //로그인 되있을경우
+        if(session.getAttribute("memberInfo") != null) {
+           return "redirect:/board/new";
+        }
+
+        //로그인되어있지 않을경우
+        return "boardErrorPage/requestLogin";
+
+    }
 }
