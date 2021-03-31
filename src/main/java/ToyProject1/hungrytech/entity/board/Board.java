@@ -26,7 +26,7 @@ public class Board extends BaseEntity {
     @Column(name = "board_content", nullable = false)
     private String content;
 
-    @Column(name = "board_img")
+    @Column(name = "board_imgpath")
     private String imgPath;
 
     @ManyToOne(fetch = FetchType.LAZY)
