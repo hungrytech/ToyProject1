@@ -64,7 +64,7 @@
                         <img
                                 id="serverImg"
                                 th:if="${boardInfo.imgPath!=null}"
-                                th:src="@{'/boardImgs/' + *{imgPath}}"
+                                th:src="@{/loadImgFile/{imgPath}(imgPath=${boardInfo.imgPath})}"
                                 class="img-thumbnail"
                                 alt="..."
                                 style="width: 500px; height: 500px"

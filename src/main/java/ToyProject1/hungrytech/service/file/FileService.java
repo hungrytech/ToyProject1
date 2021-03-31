@@ -11,9 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class FileService {
 
-    private static final String LOCALPATH =
-            "C:/Users/lee taek min/Desktop/ToyProject/" +
-                    "ToyProject1/out/production/resources/static/boardImgs/";
+    private static final String LOCALPATH = "C:/Temp/";
 
     public String fileUpload(MultipartFile file) throws Exception{
 
@@ -21,7 +19,14 @@ public class FileService {
 
         String boardImgPath = createBoardImgPath(localPath);
 
+        File localDir = new File(LOCALPATH);
+
         File dest = new File(localPath);
+
+        //해당 디렉토리가 존재하지 않으면 생성
+        if(!localDir.exists()) {
+            localDir.mkdir();
+        }
 
         file.transferTo(dest);
 
@@ -47,9 +52,9 @@ public class FileService {
             return false;
         }
 
-        String localpath = changeLocalpath(boardImgPath);
+        String localPath = changeLocalPath(boardImgPath);
 
-        File file = new File(localpath);
+        File file = new File(localPath);
 
         //해당 경로에 파일이 존재한다면 삭제
         if(file.exists())  {
@@ -61,7 +66,7 @@ public class FileService {
         return false;
     }
 
-    private String changeLocalpath(String boardImgPath) {
+    public String changeLocalPath(String boardImgPath) {
         return LOCALPATH + boardImgPath;
     }
 
