@@ -12,9 +12,10 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@SequenceGenerator(sequenceName = "USER_SEQ_BOARD", name = "USER_SEQ_BOARD")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ_BOARD")
     @Column(name = "board_id")
     private Long id;
 

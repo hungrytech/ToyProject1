@@ -13,9 +13,10 @@ import java.util.List;
 
 @Entity
 @Getter
+@SequenceGenerator(name = "USER_SEQ_MEMBER", sequenceName = "USER_SEQ_MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ_MEMBER")
     @Column(name = "member_id")
     private Long id;
 
