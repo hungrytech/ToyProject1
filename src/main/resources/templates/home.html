@@ -12,17 +12,17 @@
         <p>
         <p class="lead">회원</p>
         <a
-                th:if="${session.size()==0}"
+                th:if="${session.memberInfo == null}"
                 class="btn btn-lg btn btn-success login"
                 href="/member/new">
           회원가입</a>
         <a
-                th:if="${session.size()==0}"
+                th:if="${session.memberInfo == null}"
                 class="btn btn-lg btn btn btn-warning login"
                 href="/loginForm">
           로그인</a>
         <a
-                th:unless="${session.size()==0}" href="#"
+                th:unless="${session.memberInfo == null}" href="#"
                 th:href="@{/member/{id}/edit(id=${session.memberInfo.getAccountId()})}"
                 class="btn btn-lg btn btn-danger"
         >마이페이지</a>
@@ -32,7 +32,7 @@
           <a class="btn btn-lg btn btn-dark"
              th:href="@{/boards}"
           >게시판</a>
-          <a th:unless="${session.size()==0}"
+          <a th:unless="${session.memberInfo == null}"
           class="btn btn-lg btn btn-info"
           th:href="@{/board/new}">
             게시글 등록</a>
