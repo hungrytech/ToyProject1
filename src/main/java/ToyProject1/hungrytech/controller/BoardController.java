@@ -120,6 +120,7 @@ public class BoardController {
         //기존 게시글에 이미지파일이 있는경우
         if(result) {
 
+            //수정된 이미지파일이 있을경우
             if(!file.isEmpty()) {
                 String boardImgPath = fileService.fileUpload(file);
 
@@ -130,6 +131,8 @@ public class BoardController {
                 return "board/boardChange/boardInfoChange";
             }
 
+
+            boardInfo.setImgPath(null);
             boardService.changeBoard(boardInfo, loginInfo.getAccountId());
 
             return "board/boardChange/boardInfoChange";
