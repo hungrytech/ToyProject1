@@ -37,30 +37,47 @@
                 </table>
             </div>
             <div class="w-100"></div>
-            <div class="col">
+            <div class="col-2">
                 <a th:href="@{/boards/write}"
                    type="button"
                    class="btn btn-outline-secondary">글쓰기</a>
             </div>
             <!-- 검색 -->
-            <div class="col-7">
-                <div class="input-group mb-3">
-                    <input
-                            type="text"
-                            class="form-control"
-                            aria-label="Recipient's username"
-                            aria-describedby="button-addon2"
-                    />
-                    <div class="input-group-append">
-                        <button
-                                class="btn btn-outline-secondary"
-                                type="button"
-                                id="button-addon2"
-                        >
-                            검색
-                        </button>
+            <div class="col-10">
+                <form th:object="${searchCondition}" method="get">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text"
+                                   for="inputGroupSelect01">Options</label>
+                        </div>
+                        <select th:field="*{condition}" class="custom-select" id="inputGroupSelect01">
+                            <option th:each="condition : ${searchCondition.conditionList}"
+                                    th:value="${condition.value}"
+                                    th:text="${condition.key}"
+                            >
+                                option
+                            </option>
+
+                        </select>
+
+                        <input
+                                type="text"
+                                th:field="*{searchText}"
+                                class="form-control"
+                                aria-label="Recipient's username"
+                                aria-describedby="button-addon2"
+                        />
+                        <div class="input-group-append">
+                            <button
+                                    class="btn btn-outline-secondary"
+                                    type="submit"
+                                    id="button-addon2"
+                            >
+                                검색
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
             <!-- 검색끝 -->
             <div class="col"></div>
@@ -78,7 +95,9 @@
                                 class="page-item">
                             <a
                                     class="page-link"
-                                    th:href="@{/boards(page = 1)}"
+                                    th:href="@{/boards(page = 1,
+                                     condition=${searchCondition.condition},
+                                      searchText=${searchCondition.searchText})}"
                             >First</a>
                         </li>
                         <li
@@ -86,7 +105,9 @@
                                 class="page-item">
                             <a
                                     class="page-link"
-                                    th:href="@{/boards(page = ${pageNumber})}"
+                                    th:href="@{/boards(page = ${pageNumber},
+                                    condition=${searchCondition.condition},
+                                    searchText=${searchCondition.searchText})}"
                                     aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -96,8 +117,11 @@
                                 th:classappend="${pageNumber+1==page} ? active : ''"
                                 class="page-item">
                             <a class="page-link"
+                               th:unless="${page==0}"
                                th:text="${page}"
-                               th:href="@{/boards(page=${page})}">
+                               th:href="@{/boards(page=${page},
+                               condition=${searchCondition.condition},
+                               searchText=${searchCondition.searchText})}">
                             >1</a>
                         </li>
                         <li
@@ -105,7 +129,9 @@
                                 class="page-item"
                         >
                             <a class="page-link"
-                               th:href="@{/boards(page=${pageNumber+2})}"
+                               th:href="@{/boards(page=${pageNumber+2},
+                               condition=${searchCondition.condition},
+                               searchText=${searchCondition.searchText})}"
                                aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -116,7 +142,9 @@
                         >
                             <a
                                     class="page-link"
-                                    th:href="@{/boards(page = ${totalPage})}"
+                                    th:href="@{/boards(page = ${totalPage},
+                                    condition=${searchCondition.condition},
+                                    searchText=${searchCondition.searchText})}"
                             >Last</a>
                         </li>
                     </ul>

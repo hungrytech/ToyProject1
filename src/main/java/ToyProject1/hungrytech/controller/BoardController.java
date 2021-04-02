@@ -2,6 +2,7 @@ package ToyProject1.hungrytech.controller;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
+import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
 import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
@@ -168,9 +169,9 @@ public class BoardController {
     }
 
     /**
-     * 게시판
+     * 게시판 (Spring Data JPA 정적쿼리)
      */
-    @GetMapping("/boards")
+    /*@GetMapping("/boards")
     public String bulletinBoard(Pageable pageable,
                                 Model model) {
 
@@ -188,7 +189,25 @@ public class BoardController {
                 .stream()
                 .map(BulletinBoardInfo::new)
                 .collect(Collectors.toList());
+    }*/
+
+    /**
+     * 게시판 (Querydsl을 이용한 동적쿼리)
+     * 검색기능 추가
+     */
+    @GetMapping("/boards")
+    public String bulletinBoard(Pageable pageable,
+                                @ModelAttribute("searchCondition") BoardSearchCondition searchCondition,
+                                Model model) {
+
+        Page<BulletinBoardInfo> boardPage = boardService.searchBoardList(pageable, searchCondition);
+
+        model.addAttribute("boardPage", boardPage);
+        model.addAttribute("boards", boardPage.getContent());
+        return "board/bulletinBoard/bulletinBoard";
     }
+
+
 
     @GetMapping("/boards/write")
     public String bulletinBoardWrite(HttpSession session) {

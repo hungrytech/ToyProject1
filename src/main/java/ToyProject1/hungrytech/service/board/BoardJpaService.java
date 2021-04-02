@@ -2,6 +2,8 @@ package ToyProject1.hungrytech.service.board;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
+import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
+import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.repository.BoardRepository;
@@ -89,5 +91,19 @@ public class BoardJpaService implements BoardService {
         pageable = PageRequest.of(page, 7, Sort.by(Sort.Direction.DESC, "createdDate"));
 
         return boardRepository.pagingBoardsToAccountId(accountId, pageable);
+    }
+
+    /**
+     * 게시글 조회,
+     * 제목, 내용, 해당게시글 작성자아이디, 제목+내용 검색
+     */
+    @Override
+    public Page<BulletinBoardInfo> searchBoardList(Pageable pageable, BoardSearchCondition searchCondition) {
+
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
+        pageable = PageRequest.of(page, 10);
+
+        return boardRepository.search(pageable, searchCondition);
+
     }
 }

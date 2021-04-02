@@ -1,6 +1,9 @@
 package ToyProject1.hungrytech.repository;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
+import ToyProject1.hungrytech.boardDto.BoardInfo;
+import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
+import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
@@ -13,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -55,21 +57,18 @@ public class BoardRepositoryTest {
         BoardForm boardForm1 = new BoardForm();
         boardForm1.setTitle("게시글 제목1");
         boardForm1.setContent("게시글 본문1");
-        boardForm1.setImgPath("C:");
 
         Board board1 = Board.createBoard(boardForm1, member);
 
         BoardForm boardForm2 = new BoardForm();
         boardForm2.setTitle("게시글 제목2");
         boardForm2.setContent("게시글 본문2");
-        boardForm2.setImgPath("C:");
 
         Board board2 = Board.createBoard(boardForm2, member);
 
         BoardForm boardForm3 = new BoardForm();
         boardForm3.setTitle("게시글 제목3");
         boardForm3.setContent("게시글 본문3");
-        boardForm3.setImgPath("C:");
 
         Board board3 = Board.createBoard(boardForm3, member);
 
@@ -191,6 +190,63 @@ public class BoardRepositoryTest {
         Member member = boardById.getMember();
         //then
         assertThat(member).isNotNull();
+    }
+
+    @Test
+    @DisplayName("해당 게시글 검색기능 테스트")
+    public void pageSearch() throws Exception {
+        //given
+        //Member
+        for (int i=2; i<5; i++) {
+            MemberForm memberForm = new MemberForm();
+            memberForm.setName("유저" + i);
+            memberForm.setAccountId("user" + i);
+            memberForm.setAccountPw(passwordEncoder.encode("1234"));
+            memberForm.setEmail("user1@gmail.com");
+            memberForm.setPhoneNumber("010-1110-1111");
+
+            Member member = Member.createMember(memberForm);
+
+            memberRepository.save(member);
+
+            BoardForm boardForm1 = new BoardForm();
+            boardForm1.setTitle("게시글 제목1");
+            boardForm1.setContent("게시글 본문1");
+
+            Board board1 = Board.createBoard(boardForm1, member);
+
+            BoardForm boardForm2 = new BoardForm();
+            boardForm2.setTitle("게시글 제목2");
+            boardForm2.setContent("게시글 본문2");
+
+            Board board2 = Board.createBoard(boardForm2, member);
+
+            BoardForm boardForm3 = new BoardForm();
+            boardForm3.setTitle("게시글 제목3");
+            boardForm3.setContent("게시글 본문3");
+
+            Board board3 = Board.createBoard(boardForm3, member);
+
+            boardRepository.save(board1);
+            boardRepository.save(board2);
+            boardRepository.save(board3);
+        }
+
+        PageRequest pageRequest = PageRequest
+                .of(0, 4, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+        BoardSearchCondition searchCondition = new BoardSearchCondition();
+        searchCondition.setCondition("title");
+        searchCondition.setSearchText("제목1");
+
+        Page<BulletinBoardInfo> result = boardRepository.search(pageRequest, searchCondition);
+
+
+        assertThat(result.getContent()).extracting("title")
+                .containsExactly("게시글 제목3");
+
+        assertThat(result.getContent().size()).isEqualTo(4);
+        assertThat(result.getTotalPages()).isEqualTo(1);
     }
 
 
