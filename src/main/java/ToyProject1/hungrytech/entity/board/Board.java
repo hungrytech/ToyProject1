@@ -2,12 +2,15 @@ package ToyProject1.hungrytech.entity.board;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.entity.BaseEntity;
+import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
 import ToyProject1.hungrytech.entity.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -33,6 +36,8 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "board")
+    private List<BoardComment> boardComments = new ArrayList<>();
 
     public Board(BoardForm boardForm, Member member) {
         this.title = boardForm.getTitle();
