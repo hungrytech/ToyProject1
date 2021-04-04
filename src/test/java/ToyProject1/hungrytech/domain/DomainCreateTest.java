@@ -1,7 +1,9 @@
 package ToyProject1.hungrytech.domain;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
+import ToyProject1.hungrytech.boardcommentDto.BoardCommentForm;
 import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -50,8 +54,15 @@ public class DomainCreateTest {
 
         em.persist(member);
         em.persist(board);
-    }
 
+        BoardCommentForm boardCommentForm = new BoardCommentForm();
+        boardCommentForm.setContent("안녕하세요");
+
+        BoardComment boardComment = BoardComment
+                .createdBoardComment(boardCommentForm, member, board);
+
+        em.persist(boardComment);
+    }
 
 
     @Test
@@ -65,7 +76,6 @@ public class DomainCreateTest {
 
         assertThat(findMember.getName()).isEqualTo("유저1");
 
-        assertThat(findMember.getBoards().size()).isEqualTo(1);
     }
 
     @Test
@@ -78,6 +88,43 @@ public class DomainCreateTest {
                 .getSingleResult();
 
 
-        assertThat(passwordEncoder.matches("1234",findMember.getAccountPw())).isTrue();
+        assertThat(passwordEncoder.matches("1234", findMember.getAccountPw())).isTrue();
     }
+
+    @Test
+    public void test() {
+        //given
+        List<Member> members = em
+                .createQuery("select m from Member m join fetch m.boards b", Member.class)
+                .getResultList();
+        //when
+
+        BoardCommentForm boardCommentForm = new BoardCommentForm();
+        boardCommentForm.setContent("두번째 댓글");
+        BoardComment boardComment = BoardComment.createdBoardComment(boardCommentForm,
+                members.get(0),
+                members.get(0)
+                        .getBoards()
+                        .get(0));
+
+
+        em.persist(boardComment);
+
+        em.flush();
+        em.clear();
+
+
+        List<BoardComment> boardComments = em
+                .createQuery("select bc from BoardComment bc", BoardComment.class)
+                .getResultList();
+
+        //then
+
+        assertThat(boardComments)
+                .extracting("content")
+                .contains("두번째 댓글", "안녕하세요");
+
+        assertThat(boardComments.get(0).getBoard().getContent()).isEqualTo("게시글 본문");
+    }
+
 }
