@@ -1,4 +1,4 @@
-package ToyProject1.hungrytech.service;
+package ToyProject1.hungrytech.service.board;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
@@ -6,7 +6,6 @@ import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.repository.BoardRepository;
-import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.member.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

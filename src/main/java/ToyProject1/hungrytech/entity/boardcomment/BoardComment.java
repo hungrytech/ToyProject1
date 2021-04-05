@@ -56,4 +56,8 @@ public class BoardComment extends BaseEntity {
         this.board = board;
         board.getBoardComments().add(this);
     }
+
+    public void changeContent(String content){
+        this.content = content;
+    }
 }

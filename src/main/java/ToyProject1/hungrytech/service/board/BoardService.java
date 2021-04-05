@@ -5,12 +5,11 @@ import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
 import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
-import ToyProject1.hungrytech.entity.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 
-public interface BoardService {
+public interface BoardService extends BoardCommentService{
 
     /**
      * 게시글 작성

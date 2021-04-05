@@ -4,9 +4,13 @@ import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
 import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
+import ToyProject1.hungrytech.boardcommentDto.BoardCommentForm;
 import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
 import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.repository.BoardCommentRepository;
 import ToyProject1.hungrytech.repository.BoardRepository;
+import ToyProject1.hungrytech.repository.MemberRepository;
 import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class BoardJpaService implements BoardService {
 
+    private final BoardCommentRepository boardCommentRepository;
     private final BoardRepository boardRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
+
 
     /**
      * 게시글 작성
@@ -30,17 +36,17 @@ public class BoardJpaService implements BoardService {
      * 게시글 삭제
      */
     //게시글 작성
-    @Transactional
     @Override
+    @Transactional
     public void writeBoard(BoardForm boardForm, String accountId ){
-        Member findMember = memberService.findInfo(accountId);
+        Member findMember = memberRepository.findMemberByAccountId(accountId);
         Board board = Board.createBoard(boardForm, findMember);
         boardRepository.save(board);
     }
 
     //게시글 수정
-    @Transactional
     @Override
+    @Transactional
     public void changeBoard(BoardInfo boardInfo, String accountId) {
 
         Board board = boardRepository
@@ -54,8 +60,8 @@ public class BoardJpaService implements BoardService {
     }
 
     //게시글 삭제
-    @Transactional
     @Override
+    @Transactional
     public void deletedBoard(Long boardId) {
         Board findBoard = boardRepository
                 .findBoardById(boardId);
@@ -105,5 +111,38 @@ public class BoardJpaService implements BoardService {
 
         return boardRepository.search(pageable, searchCondition);
 
+    }
+
+    /**
+     * 댓글 등록, 수정, 삭제
+     */
+    @Override
+    @Transactional
+    public void writeComment(BoardCommentForm commentForm, String accountId, Long boardId) {
+
+        Member findMember = memberRepository.findMemberByAccountId(accountId);
+
+        Board findBoard = boardRepository.findBoardById(boardId);
+
+        BoardComment boardComment = BoardComment
+                .createdBoardComment(commentForm, findMember, findBoard);
+
+        boardCommentRepository.save(boardComment);
+
+    }
+
+    @Override
+    @Transactional
+    public void updateCommentContent(Long boardCommentId, String content) {
+        BoardComment boardComment = boardCommentRepository.findBoardCommentById(boardCommentId);
+
+        boardComment.changeContent(content);
+
+    }
+
+    @Override
+    public void deleteComment(Long boardCommentId) {
+        BoardComment boardComment = boardCommentRepository.findBoardCommentById(boardCommentId);
+        boardCommentRepository.delete(boardComment);
     }
 }
