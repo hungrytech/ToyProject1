@@ -95,9 +95,10 @@
                                 class="page-item">
                             <a
                                     class="page-link"
-                                    th:href="@{/boards(page = 1,
+                                    th:href="@{/boards(
                                      condition=${searchCondition.condition},
-                                      searchText=${searchCondition.searchText})}"
+                                      searchText=${searchCondition.searchText},
+                                      page = 1)}"
                             >First</a>
                         </li>
                         <li
@@ -105,9 +106,10 @@
                                 class="page-item">
                             <a
                                     class="page-link"
-                                    th:href="@{/boards(page = ${pageNumber},
+                                    th:href="@{/boards(
                                     condition=${searchCondition.condition},
-                                    searchText=${searchCondition.searchText})}"
+                                    searchText=${searchCondition.searchText},
+                                    page = ${pageNumber})}"
                                     aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -119,9 +121,10 @@
                             <a class="page-link"
                                th:unless="${page==0}"
                                th:text="${page}"
-                               th:href="@{/boards(page=${page},
+                               th:href="@{/boards(
                                condition=${searchCondition.condition},
-                               searchText=${searchCondition.searchText})}">
+                               searchText=${searchCondition.searchText},
+                               page=${page})}">
                             >1</a>
                         </li>
                         <li
@@ -129,9 +132,10 @@
                                 class="page-item"
                         >
                             <a class="page-link"
-                               th:href="@{/boards(page=${pageNumber+2},
+                               th:href="@{/boards(
                                condition=${searchCondition.condition},
-                               searchText=${searchCondition.searchText})}"
+                               searchText=${searchCondition.searchText},
+                               page=${pageNumber+2})}"
                                aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -142,9 +146,10 @@
                         >
                             <a
                                     class="page-link"
-                                    th:href="@{/boards(page = ${totalPage},
+                                    th:href="@{/boards(
                                     condition=${searchCondition.condition},
-                                    searchText=${searchCondition.searchText})}"
+                                    searchText=${searchCondition.searchText},
+                                    page = ${totalPage})}"
                             >Last</a>
                         </li>
                     </ul>
