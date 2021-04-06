@@ -2,6 +2,7 @@ package ToyProject1.hungrytech.entity.member;
 
 import ToyProject1.hungrytech.entity.BaseEntity;
 import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,7 +39,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Board> boards= new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<BoardComment> boardComments = new ArrayList<>();
 
     public Member(String name, String accountId, String accountPw, String email, String phoneNumber) {
         this.name = name;

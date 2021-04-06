@@ -36,7 +36,7 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<BoardComment> boardComments = new ArrayList<>();
 
     public Board(BoardForm boardForm, Member member) {

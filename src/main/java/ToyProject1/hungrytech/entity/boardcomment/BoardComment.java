@@ -38,6 +38,7 @@ public class BoardComment extends BaseEntity {
     public BoardComment(String content, Member member, Board board) {
         this.content = content;
         this.member = member;
+        insertMember(member);
         insertBoard(board);
 
     }
@@ -51,6 +52,10 @@ public class BoardComment extends BaseEntity {
 
     }
 
+    private void insertMember(Member member) {
+        this.member = member;
+        member.getBoardComments().add(this);
+    }
 
     private void insertBoard(Board board) {
         this.board = board;
