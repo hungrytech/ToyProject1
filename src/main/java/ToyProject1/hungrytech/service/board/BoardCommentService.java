@@ -8,7 +8,7 @@ public interface BoardCommentService {
      * 댓글 등록, 수정, 삭제
      *
      */
-    void writeComment(BoardCommentForm commentForm, String accountId, Long boardId);
+    void writeComment(BoardCommentForm boardCommentForm);
 
     void updateCommentContent(Long boardCommentId, String content);
 

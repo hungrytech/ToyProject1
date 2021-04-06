@@ -118,11 +118,11 @@ public class BoardJpaService implements BoardService {
      */
     @Override
     @Transactional
-    public void writeComment(BoardCommentForm commentForm, String accountId, Long boardId) {
+    public void writeComment(BoardCommentForm commentForm) {
 
-        Member findMember = memberRepository.findMemberByAccountId(accountId);
+        Member findMember = memberRepository.findMemberByAccountId(commentForm.getAccountId());
 
-        Board findBoard = boardRepository.findBoardById(boardId);
+        Board findBoard = boardRepository.findBoardById(commentForm.getBoardId());
 
         BoardComment boardComment = BoardComment
                 .createdBoardComment(commentForm, findMember, findBoard);

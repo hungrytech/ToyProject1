@@ -82,17 +82,18 @@ class BoardCommentServiceTest {
         for(int i=0; i<10; i++) {
             BoardCommentForm commentForm = new BoardCommentForm();
             commentForm.setContent("댓글" + i);
-
+            commentForm.setBoardId(boards.get(0).getId());
+            commentForm.setAccountId(member.getAccountId());
             commentForms.add(commentForm);
+
         }
 
 
         //when
 
         for (BoardCommentForm commentForm : commentForms) {
-            boardCommentService.writeComment(commentForm,
-                    member.getAccountId(),
-                    boards.get(0).getId());
+            boardCommentService.writeComment(commentForm);
+
         }
 
 
@@ -116,14 +117,15 @@ class BoardCommentServiceTest {
         for(int i=0; i<10; i++) {
             BoardCommentForm commentForm = new BoardCommentForm();
             commentForm.setContent("댓글" + i);
-
+            commentForm.setBoardId(boards.get(0).getId());
+            commentForm.setAccountId(member.getAccountId());
             commentForms.add(commentForm);
+
         }
 
         for (BoardCommentForm commentForm : commentForms) {
-            boardCommentService.writeComment(commentForm,
-                    member.getAccountId(),
-                    boards.get(0).getId());
+            boardCommentService.writeComment(commentForm);
+
         }
 
         //when
@@ -153,14 +155,15 @@ class BoardCommentServiceTest {
         for(int i=0; i<10; i++) {
             BoardCommentForm commentForm = new BoardCommentForm();
             commentForm.setContent("댓글" + i);
-
+            commentForm.setBoardId(boards.get(0).getId());
+            commentForm.setAccountId(member.getAccountId());
             commentForms.add(commentForm);
+
         }
 
         for (BoardCommentForm commentForm : commentForms) {
-            boardCommentService.writeComment(commentForm,
-                    member.getAccountId(),
-                    boards.get(0).getId());
+            boardCommentService.writeComment(commentForm);
+
         }
 
         //when
@@ -174,7 +177,8 @@ class BoardCommentServiceTest {
 
 
         //then
-        assertThat(boardComments.size()).isEqualTo(9);
+        //flush, clear를 해야 영속성 컨텍스트에서 가져오지 않고, 적용된 db에서 가져온다.
+        assertThat(boardComments.size()).isEqualTo(10);
 
 
     }
