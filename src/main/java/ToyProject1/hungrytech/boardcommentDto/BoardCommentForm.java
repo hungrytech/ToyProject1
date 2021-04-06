@@ -8,7 +8,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BoardCommentForm {
 
+    private String accountId;
+
     private String content;
+
+    private Long boardId;
 
 
 }
