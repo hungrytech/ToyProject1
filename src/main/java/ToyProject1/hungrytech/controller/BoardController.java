@@ -4,7 +4,9 @@ import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
 import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
+import ToyProject1.hungrytech.boardcommentDto.BoardCommentInfo;
 import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
 import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
 import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.file.FileService;
@@ -19,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.http.HttpSession;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,6 +78,8 @@ public class BoardController {
 
         Board findBoard = boardService.findBoardById(boardId);
 
+        List<BoardCommentInfo> commentInfoList = changeBoardCommentInfo(findBoard.getBoardComments());
+
         //로그인 되었을경우
         if(session.getAttribute("memberInfo") != null) {
             MemberLoginInfo memberInfo = (MemberLoginInfo) session
@@ -86,13 +92,26 @@ public class BoardController {
 
             model.addAttribute("boardInfo", new BoardInfo(findBoard));
             model.addAttribute("result", result);
+            model.addAttribute("comments", commentInfoList);
             return "board/inquireBoard/inquireBoard";
         }
 
         //로그인이 안되있을경우
         model.addAttribute("boardInfo", new BoardInfo(findBoard));
         model.addAttribute("result", false);
+        model.addAttribute("comments", commentInfoList);
         return "board/inquireBoard/inquireBoard";
+    }
+
+    private List<BoardCommentInfo> changeBoardCommentInfo(List<BoardComment> comments) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
+        Collections.reverse(comments);
+
+        return comments
+                .stream()
+                .map(c -> new BoardCommentInfo(c, c.getCreatedDate().format(dateTimeFormatter)))
+                .collect(Collectors.toList());
     }
 
     private boolean personalPublication(String memberAccountId, String sessionAccountId) {

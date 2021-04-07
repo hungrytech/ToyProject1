@@ -76,6 +76,35 @@
                        class="btn btn-outline-danger">삭제</a>
                 </form>
             </div>
+            <div class="w-100"></div>
+            <div class="col-12 mt-2" th:if="${session.memberInfo!=null}">
+                <div class="p-1 border rounded">
+                    <span class="ml-2" th:text="${session.memberInfo.accountId}"></span>
+                    <div class="input-group mt-1">
+                        <textarea class="form-control"
+                                  id="comment"
+                                  aria-label="With textarea"
+                                  placeholder="댓글을 남겨보세요"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button class="custom-button"
+                                type="button"
+                                th:onclick="writeComment([[${session.memberInfo.accountId}]], [[${boardInfo.id}]]);"
+                                >등록</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 mt-2 border-top" id="commentList">
+                <div th:each="comment : ${comments}" class="mt-2 p-1 border rounded">
+                    <span th:text="${comment.accountId}"></span>
+                    <textarea
+                            th:readonly="${!(comment.accountId == session.memberInfo.accountId)}"
+                            th:text="${comment.content}"
+                            class="form-control"></textarea>
+                    <span th:text="${comment.dateTime}"></span>
+                </div>
+
+            </div>
         </div>
     </main>
 
@@ -104,7 +133,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
     -->
 
-    <script>
+    <script type="text/javascript">
         <!-- 삭제요청 -->
         function deleteBoard(id) {
             let form = document.createElement("form");
@@ -112,6 +141,69 @@
             form.setAttribute("action", "/board/" + id + "/delete");
             document.body.appendChild(form);
             form.submit();
+        }
+
+        <!-- 댓글 작성 -->
+        function writeComment(accountId, boardId) {
+            let content = document.getElementById("comment");
+
+            // 내용입력을 안했을 경우
+            if(content.value === ''){
+                alert('내용을 입력해주세요')
+                return;
+            }
+
+            let obj = new Object();
+            obj.accountId = accountId;
+            obj.content = content.value;
+            obj.boardId = boardId;
+
+            let jsonData = JSON.stringify(obj);
+
+            let xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function () {
+                if(this.readyState === 4 && this.status === 201) {
+                    const commentInfo = this.responseText;
+                    const info = JSON.parse(commentInfo);
+                    createCommentDiv(info);
+
+                }
+
+            };
+
+            xhttp.open("POST","/boardComment/new");
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.send(jsonData);
+
+            content.value = '';
+
+        }
+
+        function createCommentDiv(info) {
+            let commentList = document.getElementById("commentList");
+
+            <!-- commentList 첫번째 노드로 추가-->
+            let commentInfo = document.createElement("div");
+            commentInfo.setAttribute("id", "commentInfo");
+            commentInfo.setAttribute("class", "mt-2 p-1 border rounded");
+
+            commentList.insertBefore(commentInfo, commentList.firstChild);
+
+            <!-- commentInfo 자식노드 추가 -->
+            let span = document.createElement("span");
+            span.innerText = info.accountId;
+
+            let textArea = document.createElement("textarea");
+            textArea.setAttribute("class", "form-control");
+            textArea.innerText = info.content;
+
+            let dateSpan = document.createElement("span");
+            dateSpan.innerText = info.dateTime;
+
+            commentInfo.append(span, textArea, dateSpan);
+
+
         }
     </script>
 
