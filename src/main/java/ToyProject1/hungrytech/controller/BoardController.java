@@ -45,7 +45,7 @@ public class BoardController {
     public String boardForm(BoardForm boardForm, Model model) {
 
         model.addAttribute("boardForm", boardForm);
-        return "board/writeBoard/boardForm";
+        return "board/writeBoard/board_form";
     }
 
     @PostMapping("/board/new")
@@ -67,7 +67,7 @@ public class BoardController {
 
         boardService.writeBoard(boardForm, loginInfo.getAccountId());
 
-        return "home";
+        return "board/writeBoard/board_write_success";
     }
 
     //게시글 조회
@@ -93,14 +93,14 @@ public class BoardController {
             model.addAttribute("boardInfo", new BoardInfo(findBoard));
             model.addAttribute("result", result);
             model.addAttribute("comments", commentInfoList);
-            return "board/inquireBoard/inquireBoard";
+            return "board/inquireBoard/inquire_board";
         }
 
         //로그인이 안되있을경우
         model.addAttribute("boardInfo", new BoardInfo(findBoard));
         model.addAttribute("result", false);
         model.addAttribute("comments", commentInfoList);
-        return "board/inquireBoard/inquireBoard";
+        return "board/inquireBoard/inquire_board";
     }
 
     private List<BoardCommentInfo> changeBoardCommentInfo(List<BoardComment> comments) {
@@ -148,14 +148,14 @@ public class BoardController {
 
                 boardService.changeBoard(boardInfo,loginInfo.getAccountId());
 
-                return "board/boardChange/boardInfoChange";
+                return "board/boardChange/board_info_change";
             }
 
 
             boardInfo.setImgPath(null);
             boardService.changeBoard(boardInfo, loginInfo.getAccountId());
 
-            return "board/boardChange/boardInfoChange";
+            return "board/boardChange/board_info_change";
         }
 
         //기존 게시물에 이미지파일이 없는경우
@@ -166,13 +166,13 @@ public class BoardController {
 
             boardService.changeBoard(boardInfo, loginInfo.getAccountId());
 
-            return "board/boardChange/boardInfoChange";
+            return "board/boardChange/board_info_change";
 
         }
 
         boardService.changeBoard(boardInfo, loginInfo.getAccountId());
 
-        return "board/boardChange/boardInfoChange";
+        return "board/boardChange/board_info_change";
     }
 
     //게시글 삭제
@@ -184,7 +184,7 @@ public class BoardController {
 
         boardService.deletedBoard(findBoard.getId());
 
-        return "board/boardDelete/boardDelete";
+        return "board/boardDelete/board_delete";
     }
 
     /**
@@ -223,7 +223,7 @@ public class BoardController {
 
         model.addAttribute("boardPage", boardPage);
         model.addAttribute("boards", boardPage.getContent());
-        return "board/bulletinBoard/bulletinBoard";
+        return "board/bulletinBoard/bulletin_board";
     }
 
 
@@ -236,7 +236,7 @@ public class BoardController {
         }
 
         //로그인되어있지 않을경우
-        return "boardErrorPage/requestLogin";
+        return "boardErrorPage/request_login";
 
     }
 }

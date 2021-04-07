@@ -37,7 +37,7 @@ public class MemberController {
     @GetMapping("/loginForm")
     public String login(Model model) {
         model.addAttribute("memberLoginForm", new MemberLoginForm());
-        return "login/loginPage";
+        return "login/login_page";
     }
 
     @PostMapping("/member/login")
@@ -59,13 +59,13 @@ public class MemberController {
         //id 저장 처리
         if(loginForm.isSaveId()) {
             loginForm.setAccountPw("");
-            return "login/loginPage";
+            return "login/login_page";
         }
 
         //id 저장체크를 하지 않았을 때
         loginForm.setAccountId("");
         loginForm.setAccountPw("");
-        return "login/loginPage";
+        return "login/login_page";
 
 
     }
@@ -83,7 +83,7 @@ public class MemberController {
     @GetMapping("/member/new")
     public String join(Model model) {
         model.addAttribute("memberForm", new MemberForm());
-        return "join/joinPage";
+        return "join/join_page";
     }
 
     @PostMapping("/member/new")
