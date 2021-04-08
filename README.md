@@ -24,7 +24,8 @@
 
 ## 사용기술
 * Spring boot 2.4.3
-* Spring Data JPA 
+* Spring Data JPA
+* Querydsl   
 * Thymeleaf
 * BootStrap4
 
