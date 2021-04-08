@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class FileService {
 
-    private static final String LOCALPATH = "C:/Temp/";
+    private static final String LOCAL_PATH = "C:/Temp/";
 
     public String fileUpload(MultipartFile file) throws Exception{
 
@@ -19,7 +19,7 @@ public class FileService {
 
         String boardImgPath = createBoardImgPath(localPath);
 
-        File localDir = new File(LOCALPATH);
+        File localDir = new File(LOCAL_PATH);
 
         File dest = new File(localPath);
 
@@ -36,13 +36,13 @@ public class FileService {
     }
 
     private String createLocalPath(String originalFilename) {
-        return LOCALPATH
+        return LOCAL_PATH
                 + UUID.randomUUID().toString()
                 + originalFilename;
     }
 
     private String createBoardImgPath(String localPath) {
-        return localPath.replaceFirst(LOCALPATH, "");
+        return localPath.replaceFirst(LOCAL_PATH, "");
     }
 
 
@@ -67,7 +67,7 @@ public class FileService {
     }
 
     public String changeLocalPath(String boardImgPath) {
-        return LOCALPATH + boardImgPath;
+        return LOCAL_PATH + boardImgPath;
     }
 
 
