@@ -13,14 +13,18 @@
 * 게시글 삭제
 * 게시글 수정
 * 게시글 검색
-  * 게시한 사용자 이름을 이용하여 검색
-  * 게시글 제목, 내용을 이용한 검색기능 (Querydsl 공부 후 추가) 
+* 게시글 제목, 내용, 제목+내용, 회원아이디 이용한 검색기능
+
+
+### 추가요구사항
+* 게시글 댓글 작성, 수정, 삭제
   
+
 ---
 
 ## 사용기술
-* Spring boot
-* Spring Data JPA
+* Spring boot 2.4.3
+* Spring Data JPA 
 * Thymeleaf
 * BootStrap4
 
