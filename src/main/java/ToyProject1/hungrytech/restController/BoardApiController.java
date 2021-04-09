@@ -62,5 +62,17 @@ public class BoardApiController {
 
     }
 
+    @PatchMapping("/boardComment/{commentId}/edit")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateComment(@PathVariable("commentId") Long commentId,
+                              @RequestBody String content) {
+        boardService.updateCommentContent(commentId, content);
+    }
 
+    @DeleteMapping("/boardComment/{commentId}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteComment(@PathVariable("commentId") Long commentId) {
+
+        boardService.deleteComment(commentId);
+    }
 }

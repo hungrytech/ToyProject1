@@ -96,14 +96,31 @@
             </div>
             <div class="col-12 mt-2 border-top" id="commentList">
                 <div th:each="comment : ${comments}" class="mt-2 p-1 border rounded">
+                    <p hidden th:text="${comment.boardCommentId}"></p>
                     <span th:text="${comment.accountId}"></span>
                     <textarea
                             th:readonly="${!(comment.accountId == session.memberInfo.accountId)}"
                             th:text="${comment.content}"
-                            class="form-control"></textarea>
-                    <span th:text="${comment.dateTime}"></span>
+                            class="form-control">
+                    </textarea>
+                    <div class="d-flex bd-highlight mb-1">
+                        <div class="mr-auto p-2 bd-highlight">
+                            <span th:text="${comment.dateTime}"></span>
+                        </div>
+                        <div class="p-1 bd-highlight">
+                            <button th:if="${comment.accountId == session.memberInfo.accountId}"
+                                    type="button"
+                                    class="custom-button"
+                                    onclick="updateComment(this)">수정</button>
+                        </div>
+                        <div class="p-1 bd-highlight">
+                            <button th:if="${comment.accountId == session.memberInfo.accountId}"
+                                    type="button"
+                                    class="custom-button"
+                                    onclick="deleteComment(this)">삭제</button>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </main>
@@ -134,7 +151,7 @@
     -->
 
     <script type="text/javascript">
-        <!-- 삭제요청 -->
+        /* 삭제요청 */
         function deleteBoard(id) {
             let form = document.createElement("form");
             form.setAttribute("method", "post");
@@ -143,7 +160,7 @@
             form.submit();
         }
 
-        <!-- 댓글 작성 -->
+        /* 댓글 작성 */
         function writeComment(accountId, boardId) {
             let content = document.getElementById("comment");
 
@@ -160,9 +177,9 @@
 
             let jsonData = JSON.stringify(obj);
 
-            let xhttp = new XMLHttpRequest();
+            let httpRequest = new XMLHttpRequest();
 
-            xhttp.onreadystatechange = function () {
+            httpRequest.onreadystatechange = function () {
                 if(this.readyState === 4 && this.status === 201) {
                     const commentInfo = this.responseText;
                     const info = JSON.parse(commentInfo);
@@ -172,9 +189,9 @@
 
             };
 
-            xhttp.open("POST","/boardComment/new");
-            xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.send(jsonData);
+            httpRequest.open("POST","/boardComment/new");
+            httpRequest.setRequestHeader("Content-Type", "application/json");
+            httpRequest.send(jsonData);
 
             content.value = '';
 
@@ -183,14 +200,20 @@
         function createCommentDiv(info) {
             let commentList = document.getElementById("commentList");
 
-            <!-- commentList 첫번째 노드로 추가-->
+            /* commentList 첫번째 노드로 추가 */
             let commentInfo = document.createElement("div");
             commentInfo.setAttribute("id", "commentInfo");
             commentInfo.setAttribute("class", "mt-2 p-1 border rounded");
 
             commentList.insertBefore(commentInfo, commentList.firstChild);
 
-            <!-- commentInfo 자식노드 추가 -->
+            /* commentInfo 자식노드 추가 */
+
+            let commentId = document.createElement("p");
+            commentId.setAttribute("hidden", true);
+            commentId.innerText = info.boardCommentId;
+
+
             let span = document.createElement("span");
             span.innerText = info.accountId;
 
@@ -198,13 +221,91 @@
             textArea.setAttribute("class", "form-control");
             textArea.innerText = info.content;
 
-            let dateSpan = document.createElement("span");
-            dateSpan.innerText = info.dateTime;
+            commentInfo.append(commentId, span, textArea);
 
-            commentInfo.append(span, textArea, dateSpan);
+            /* 날짜표시, 수정, 삭제 버튼 추가 */
+            let dFlex = document.createElement("div");
+            dFlex.setAttribute("class", "d-flex bd-highlight mb-1");
+
+            let childHighLight1 = document.createElement("div");
+            childHighLight1.setAttribute("class", "mr-auto p-2 bd-highlight");
+            let dateTime = document.createElement("span");
+            dateTime.innerText = info.dateTime;
+            childHighLight1.appendChild(dateTime);
+
+            let childHighLight2 = document.createElement("div");
+            childHighLight2.setAttribute("class", "p-1 bd-highlight");
+            let updateButton = document.createElement("button");
+            updateButton.setAttribute("type", "button");
+            updateButton.setAttribute("class", "custom-button");
+            updateButton.setAttribute("onclick", "updateComment(this)");
+            updateButton.innerText = "수정";
+            childHighLight2.appendChild(updateButton);
+
+            let childHighLight3 = document.createElement("div");
+            childHighLight3.setAttribute("class", "p-1 bd-highlight");
+            let deleteButton = document.createElement("button");
+            deleteButton.setAttribute("type", "button");
+            deleteButton.setAttribute("class", "custom-button");
+            deleteButton.setAttribute("onclick", "deleteComment(this)");
+            deleteButton.innerText = "삭제";
+            childHighLight3.appendChild(deleteButton);
+
+            dFlex.append(childHighLight1, childHighLight2, childHighLight3);
+
+            commentInfo.appendChild(dFlex);
+
+
 
 
         }
+
+        /* 댓글 수정 */
+        function updateComment(e) {
+            let parentNode = e.parentNode.parentNode.parentNode;
+            let childNodes = parentNode.children;
+            let commentId = childNodes[0].innerText;
+            let content = childNodes[2].value;
+
+            if(content === '') {
+                alert("내용을 적어주세요.");
+                return;
+            }
+
+            let httpRequest = new XMLHttpRequest();
+
+            httpRequest.onreadystatechange = function () {
+                if(this.readyState === 4 && this.status == 204) {
+                    alert('수정되었습니다.')
+                }
+            }
+            httpRequest.open("PATCH", "/boardComment/" + commentId + "/edit")
+            httpRequest.setRequestHeader("Content-Type", "text/plain")
+            httpRequest.send(content);
+        }
+
+        /* 댓글 삭제 */
+        function deleteComment(e) {
+            let parentNode = e.parentNode.parentNode.parentNode;
+            let firstChild = parentNode.firstElementChild;
+
+
+            let commentId = firstChild.innerText;
+
+            let httpRequest = new XMLHttpRequest();
+
+            httpRequest.onreadystatechange = function () {
+                if(this.readyState===4 && this.status===200) {
+                    parentNode.remove();
+                }
+            }
+            httpRequest.open("DELETE", "/boardComment/" + commentId + "/delete");
+            httpRequest.setRequestHeader("Content-Type", "text/plain");
+            httpRequest.send();
+
+
+        }
+
     </script>
 
     <!-- 이미지 미리보기 -->

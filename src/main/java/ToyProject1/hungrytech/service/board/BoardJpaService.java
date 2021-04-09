@@ -11,7 +11,6 @@ import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.repository.BoardCommentRepository;
 import ToyProject1.hungrytech.repository.BoardRepository;
 import ToyProject1.hungrytech.repository.MemberRepository;
-import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -141,6 +140,7 @@ public class BoardJpaService implements BoardService {
     }
 
     @Override
+    @Transactional
     public void deleteComment(Long boardCommentId) {
         BoardComment boardComment = boardCommentRepository.findBoardCommentById(boardCommentId);
         boardCommentRepository.delete(boardComment);

@@ -5,3 +5,8 @@
     cursor: pointer;
     color: #777777;
 }
+
+a[class~="custom-button"]:hover {
+    text-decoration: none;
+    color: #777777;
+}
