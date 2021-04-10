@@ -39,4 +39,9 @@ public interface MemberService {
     //회원 정보 변경
     void changeInfo(MemberInfo memberInfo);
 
+    /**
+     * 아이디찾기
+     * 비밀번호 찾기
+     */
+    String findMemberAccountId(String name, String email);
 }

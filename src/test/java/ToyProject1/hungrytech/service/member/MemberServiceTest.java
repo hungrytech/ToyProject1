@@ -1,4 +1,4 @@
-package ToyProject1.hungrytech.service;
+package ToyProject1.hungrytech.service.member;
 
 
 import ToyProject1.hungrytech.entity.member.Member;
@@ -7,7 +7,6 @@ import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
 import ToyProject1.hungrytech.repository.BoardRepository;
 import ToyProject1.hungrytech.repository.MemberRepository;
-import ToyProject1.hungrytech.service.member.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-public class MemberServiceTest {
+class MemberServiceTest {
     @Autowired
     MemberService memberService;
 
@@ -37,7 +36,7 @@ public class MemberServiceTest {
     PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    public void before() {
+    void before() {
         MemberForm memberForm = new MemberForm();
         memberForm.setName("유저1");
         memberForm.setAccountId("user1");
@@ -49,13 +48,12 @@ public class MemberServiceTest {
         memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
 
 
-
         memberService.join(memberForm);
     }
 
     @Test
     @DisplayName("회원가입 테스트")
-    public void joinTest() {
+    void joinTest() {
         //given
         MemberForm memberForm = new MemberForm();
         memberForm.setName("유저1");
@@ -66,7 +64,6 @@ public class MemberServiceTest {
 
         //패스워드 암호화
         memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
-
 
 
         memberService.join(memberForm);
@@ -82,7 +79,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 탈퇴 테스트")
-    public void withDrawal() {
+    void withDrawal() {
         //given
         Member findMember = memberRepository.findMemberByAccountId("user1");
 
@@ -97,7 +94,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 정보 조회 테스트")
-    public void memberInfo() {
+    void memberInfo() {
         //given
         Member member = memberRepository.findMemberByAccountId("user1");
 
@@ -110,7 +107,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 정보 변경 테스트")
-    public void changeInfo() {
+    void changeInfo() {
         //given
         Member member = memberRepository.findMemberByAccountId("user1");
 
@@ -141,7 +138,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 테스트")
-    public void loginTest() {
+    void loginTest() {
         //given
         MemberLoginForm memberLoginForm1 = new MemberLoginForm();
         memberLoginForm1.setAccountId("user1");
@@ -167,7 +164,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 증복Id check 테스트")
-    public void loginExistIdTest() {
+    void loginExistIdTest() {
 
         Optional<Member> optionalMember = memberService.checkId("user1");
 
@@ -176,6 +173,23 @@ public class MemberServiceTest {
 
     }
 
+    @Test
+    @DisplayName("아이디 찾기 테스트")
+    void searchAccountIdTest() {
+        //given
+        String username = "유저1";
+        String userEmail = "user1@gmail.com";
+
+        //when
+        String result = memberService.findMemberAccountId(username, userEmail);
+
+        //then
+        assertThat(result).isNotNull();
+
+        assertThat(result).isEqualTo("user1");
+
+
+    }
 
 
 }

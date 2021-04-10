@@ -45,8 +45,18 @@
                     >
                 </div>
                 <p th:text="${failMessage}" th:classappend="${failMessage!=null} ? 'failMessage' : ''"></p>
+                <div>
                 <button type="submit" class="btn btn-warning">로그인</button>
                 <a href="/member/new" class="btn btn btn-success">회원가입</a>
+                </div>
+                <div class="mt-2">
+                    <a href="#"
+                       target="_blank"
+                       class="btn btn-outline-secondary">아이디 찾기</a>
+                    <a href="#"
+                       target="_blank"
+                       class="btn btn-outline-info">비밀번호 찾기</a>
+                </div>
             </form>
         </main>
 

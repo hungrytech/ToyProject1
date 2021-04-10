@@ -30,6 +30,16 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findMemberByAccountId(@Param("accountId") String accountId);
 
 
+    /**
+     * 아이디 찾기
+     * 비밀번호 찾기
+     */
+
+    @Query("select m from Member m where m.name =:name and m.email =:email")
+    Optional<Member> findMemberAccountId(@Param("name")
+                                            String name,
+                                         @Param("email")
+                                            String email);
 
 
 

@@ -31,7 +31,7 @@ public class DomainCreateTest {
     @BeforeEach
     public void before() {
 
-        //Memeber
+        //Member
         MemberForm memberForm = new MemberForm();
         memberForm.setName("유저1");
         memberForm.setAccountId("user1");

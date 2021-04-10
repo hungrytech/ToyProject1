@@ -1,6 +1,5 @@
 package ToyProject1.hungrytech.repository;
 
-import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
@@ -10,13 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -144,4 +142,22 @@ public class MemberRepositoryTest {
         assertThat(result.isPresent()).isTrue();
     }
 
+    @Test
+    @DisplayName("아이디 찾기 테스트")
+    void searchAccountId() {
+        //given
+        String username = "유저1";
+        String userEmail = "user1@gmail.com";
+
+        //when
+        Optional<Member> member = memberRepository.findMemberAccountId(username, userEmail);
+
+        //then
+        if(member.isPresent()) {
+            assertThat(member.get()).isNotNull();
+        }
+
+
+
+    }
 }

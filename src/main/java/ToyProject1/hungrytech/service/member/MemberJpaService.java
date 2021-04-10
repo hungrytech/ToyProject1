@@ -100,4 +100,20 @@ public class MemberJpaService implements MemberService {
     }
 
 
+    /**
+     * 아이디 찾기
+     * 비밀번호 찾기
+     */
+    @Override
+    public String findMemberAccountId(String name, String email) {
+        Optional<Member> optionalMember = memberRepository.findMemberAccountId(name, email);
+
+        if(optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            return member.getAccountId();
+        }
+
+        return null;
+
+    }
 }
