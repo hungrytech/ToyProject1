@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<nav th:replace="fragments/body_header :: bodyheader"/>
+
+<!-- content -->
+<main class="container" style="margin-top: 150px">
+  <div class="row">
+    <div class="col">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container" th:if="${failFind} == null">
+          <h1 class="display-4">아이디 찾기 결과</h1>
+          <p class="lead">당신의 아이디는</p>
+          <p th:text="${accountId} + '입니다.'"></p>
+        </div>
+        <div class="container" th:unless="${failFind} == null">
+          <br>
+          <h1 class="display-4">아이디 찾기 결과</h1>
+          <h3 th:text="${failFind}"></h3>
+        </div>
+        <div th:if="${failFind} == null">
+          <a class="btn btn-warning btn-lg" th:href="@{/loginForm}" role="button"
+          >로그인 페이지</a
+          >
+          <a class="btn btn-danger btn-lg" href="#" role="button"
+          >비밀번호 찾기</a
+          >
+        </div>
+        <div th:unless="${failFind} == null">
+          <a class="btn btn-warning btn-lg" th:href="@{/find/accountId}" role="button"
+          >아이디 찾기</a
+          >
+          <a class="btn btn-danger btn-lg" href="#" role="button"
+          >비밀번호 찾기</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<footer th:replace="fragments/footer :: footer"/>
+</body>
+</html>

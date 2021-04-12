@@ -3,10 +3,7 @@ package ToyProject1.hungrytech.controller;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.member.Member;
-import ToyProject1.hungrytech.memberDto.MemberForm;
-import ToyProject1.hungrytech.memberDto.MemberInfo;
-import ToyProject1.hungrytech.memberDto.MemberLoginForm;
-import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
+import ToyProject1.hungrytech.memberDto.*;
 import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -134,7 +134,7 @@ public class MemberController {
 
     //회원정보 변경
     @PostMapping("/member/{id}/edit")
-    public String mypageInfoChange(MemberInfo memberInfo, Model model) {
+    public String mypageInfoChange(MemberInfo memberInfo) {
 
         memberService.changeInfo(memberInfo);
 
@@ -157,6 +157,38 @@ public class MemberController {
                 findMember.getPhoneNumber());
     }
 
+    /**
+     * 아이디찾기
+     * 비밀번호 찾기
+     */
+    @GetMapping("/find/accountId")
+    public String findAccountId(Model model) {
 
+        model.addAttribute("findAccountIdForm", new MemberFindAccountIdForm());
+        return "findAccountId/find_account_id";
+    }
 
+    @PostMapping("/find/accountId")
+    public String findAccountIdResult(@Valid @ModelAttribute("findAccountIdForm")
+                                                  MemberFindAccountIdForm findAccountIdForm,
+                                      BindingResult result,
+                                      Model model) {
+        if(result.hasErrors()) {
+            return "findAccountId/find_account_id";
+        }
+
+        String findAccountId = memberService
+                        .findMemberAccountId(
+                                findAccountIdForm.getName(),
+                                findAccountIdForm.getEmail()
+                        );
+        if(findAccountId != null) {
+            model.addAttribute("accountId", findAccountId);
+            return "findAccountId/find_account_id_success";
+        }
+
+        String findFail = "아이디를 찾을 수 없습니다.";
+        model.addAttribute("failFind", findFail);
+        return "findAccountId/find_account_id_success";
+    }
 }
