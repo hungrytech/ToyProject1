@@ -116,4 +116,17 @@ public class MemberJpaService implements MemberService {
         return null;
 
     }
+
+    @Override
+    public Member findMemberAccountPw(String accountId, String name, String email) {
+
+        Optional<Member> optionalMember = memberRepository.findMemberAccountPw(accountId, name, email);
+
+        if(optionalMember.isPresent()) {
+            return optionalMember.get();
+        }
+
+        return null;
+
+    }
 }

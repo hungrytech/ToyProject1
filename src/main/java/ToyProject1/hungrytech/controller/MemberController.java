@@ -53,8 +53,8 @@ public class MemberController {
             return "login/login_success";
         }
 
-        String loginfailMessage = "아이디 혹은 암호가 올바르지 않습니다.";
-        model.addAttribute("failMessage", loginfailMessage);
+        String loginFailMessage = "아이디 혹은 암호가 올바르지 않습니다.";
+        model.addAttribute("failMessage", loginFailMessage);
 
         //id 저장 처리
         if(loginForm.isSaveId()) {
@@ -161,6 +161,7 @@ public class MemberController {
      * 아이디찾기
      * 비밀번호 찾기
      */
+    //아이디 찾기
     @GetMapping("/find/accountId")
     public String findAccountId(Model model) {
 
@@ -184,11 +185,63 @@ public class MemberController {
                         );
         if(findAccountId != null) {
             model.addAttribute("accountId", findAccountId);
-            return "findAccountId/find_account_id_success";
+            return "findAccountId/find_account_id_result";
         }
 
-        String findFail = "아이디를 찾을 수 없습니다.";
-        model.addAttribute("failFind", findFail);
-        return "findAccountId/find_account_id_success";
+        String failMessage = "아이디를 찾을 수 없습니다.";
+        model.addAttribute("failMessage", failMessage);
+        return "findAccountId/find_account_id_result";
+    }
+
+    //비밀번호 찾기
+    @GetMapping("/find/accountPw")
+    public String findAccountPw(Model model) {
+        model.addAttribute("findAccountPwForm", new MemberFindAccountPwForm());
+        return "findaccountpw/find_account_pw";
+    }
+
+    @PostMapping("/find/accountPw")
+    public String findAccountPwResult(@Valid @ModelAttribute("findAccountPwForm")
+                                                  MemberFindAccountPwForm accountPwForm,
+                                      BindingResult result,
+                                      Model model) {
+        if(result.hasErrors()) {
+            return "findaccountpw/find_account_pw";
+        }
+        Member findMember = memberService.findMemberAccountPw(
+                accountPwForm.getAccountId(),
+                accountPwForm.getName(),
+                accountPwForm.getEmail());
+
+        //해당 회원이 없을경우
+        if(findMember == null) {
+            String failMessage = "해당 회원을 찾을 수 없습니다.";
+            model.addAttribute("failMessage", failMessage);
+            return "findaccountpw/find_account_pw_fail";
+        }
+
+        model.addAttribute("memberInfo", changeMemberInfo(findMember));
+
+        return "findaccountpw/change_account_pw";
+    }
+
+
+    private MemberInfo changeMemberInfo(Member member) {
+
+        return new MemberInfo(
+                member.getName(),
+                member.getAccountId(),
+                member.getEmail(),
+                member.getPhoneNumber());
+
+    }
+
+    //비밀번호변경
+    @PostMapping("/find/accountPw/change")
+    public String changePw(@ModelAttribute("memberInfo")
+                                       MemberInfo memberInfo) {
+        memberService.changeInfo(memberInfo);
+
+        return "findaccountpw/change_account_pw_success";
     }
 }

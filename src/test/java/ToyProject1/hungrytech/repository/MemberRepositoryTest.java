@@ -144,18 +144,41 @@ public class MemberRepositoryTest {
 
     @Test
     @DisplayName("아이디 찾기 테스트")
-    void searchAccountId() {
+    void findAccountId() {
         //given
-        String username = "유저1";
+        String userName = "유저1";
         String userEmail = "user1@gmail.com";
 
         //when
-        Optional<Member> member = memberRepository.findMemberAccountId(username, userEmail);
+        Optional<Member> member = memberRepository.findMemberAccountId(userName, userEmail);
 
         //then
         if(member.isPresent()) {
             assertThat(member.get()).isNotNull();
         }
+
+
+
+    }
+    @Test
+    @DisplayName("비밀번호 찾기 테스트")
+    void findAccountPw() {
+        //given
+        String accountId = "user1";
+        String userName = "유저1";
+        String userEmail = "user1@gmail.com";
+
+        //when
+        Optional<Member> memberAccountPw = memberRepository
+                .findMemberAccountPw(accountId, userName, userEmail);
+        Member member = null;
+        if(memberAccountPw.isPresent()) {
+            member = memberAccountPw.get();
+        }
+        //when
+        assertThat(member).isNotNull();
+
+        assertThat(member.getAccountId()).isEqualTo("user1");
 
 
 

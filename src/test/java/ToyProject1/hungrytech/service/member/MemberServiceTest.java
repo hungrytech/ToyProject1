@@ -175,13 +175,13 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("아이디 찾기 테스트")
-    void searchAccountIdTest() {
+    void findAccountIdTest() {
         //given
-        String username = "유저1";
+        String userName = "유저1";
         String userEmail = "user1@gmail.com";
 
         //when
-        String result = memberService.findMemberAccountId(username, userEmail);
+        String result = memberService.findMemberAccountId(userName, userEmail);
 
         //then
         assertThat(result).isNotNull();
@@ -189,6 +189,25 @@ class MemberServiceTest {
         assertThat(result).isEqualTo("user1");
 
 
+    }
+
+    @Test
+    @DisplayName("비밀번호 찾기 테스트")
+    void findAccountPw() {
+        //given
+        String userAccountId = "user1";
+        String userName = "유저1";
+        String userEmail = "user1@gmail.com";
+
+        //when
+        Member member = memberService
+                .findMemberAccountPw(userAccountId, userName, userEmail);
+
+        //then
+        assertThat(member).isNotNull();
+        assertThat(member)
+                .extracting("accountId", "name", "email")
+                .contains("user1", "유저1", "user1@gmail.com");
     }
 
 

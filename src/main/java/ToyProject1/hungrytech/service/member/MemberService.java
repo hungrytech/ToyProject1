@@ -44,4 +44,6 @@ public interface MemberService {
      * 비밀번호 찾기
      */
     String findMemberAccountId(String name, String email);
+
+    Member findMemberAccountPw(String accountId, String name, String email);
 }

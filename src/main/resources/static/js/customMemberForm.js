@@ -38,7 +38,6 @@ function check_pw() {
         if(pw.value === pwConfirm.value) {
             check.innerText = '비밀번호가 일치합니다.';
             check.style.color='blue';
-            pwConfirm.value = "true";
             pwConfirm.value = pw.value;
             return;
         }
