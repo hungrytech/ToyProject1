@@ -188,8 +188,7 @@ public class MemberController {
             return "findAccountId/find_account_id_result";
         }
 
-        String failMessage = "아이디를 찾을 수 없습니다.";
-        model.addAttribute("failMessage", failMessage);
+        model.addAttribute("failMessage", "아이디를 찾을 수 없습니다.");
         return "findAccountId/find_account_id_result";
     }
 
