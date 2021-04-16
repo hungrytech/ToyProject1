@@ -5,6 +5,7 @@ import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
 import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
 import ToyProject1.hungrytech.boardcommentDto.BoardCommentInfo;
+import ToyProject1.hungrytech.config.LoginMember;
 import ToyProject1.hungrytech.entity.board.Board;
 import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
 import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
@@ -19,8 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.servlet.http.HttpSession;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -52,11 +51,7 @@ public class BoardController {
     @ResponseStatus(HttpStatus.CREATED)
     public String boardWrite(@RequestPart("file") MultipartFile file,
                              BoardForm boardForm,
-                             HttpSession session) throws Exception {
-
-
-        MemberLoginInfo loginInfo = (MemberLoginInfo)session
-                .getAttribute("memberInfo");
+                             @LoginMember MemberLoginInfo loginInfo) throws Exception {
 
         if(!file.isEmpty()) {
             String boardImgPath = fileService.fileUpload(file);
@@ -73,22 +68,20 @@ public class BoardController {
     //게시글 조회
     @GetMapping("/board/{id}")
     public String findBoard(@PathVariable("id")Long boardId,
-                            Model model,
-                            HttpSession session)  {
+                            @LoginMember MemberLoginInfo loginInfo,
+                            Model model)  {
 
         Board findBoard = boardService.findBoardById(boardId);
 
         List<BoardCommentInfo> commentInfoList = changeBoardCommentInfo(findBoard.getBoardComments());
 
         //로그인 되었을경우
-        if(session.getAttribute("memberInfo") != null) {
-            MemberLoginInfo memberInfo = (MemberLoginInfo) session
-                    .getAttribute("memberInfo");
+        if(loginInfo != null) {
 
             //자기 게시물인지 확인
             boolean result = personalPublication(
                     findBoard.getMember().getAccountId(),
-                    memberInfo.getAccountId());
+                    loginInfo.getAccountId());
 
             model.addAttribute("boardInfo", new BoardInfo(findBoard));
             model.addAttribute("result", result);
@@ -123,11 +116,9 @@ public class BoardController {
     @PostMapping("/board/{id}/edit")
     public String editBoard(@PathVariable("id") Long boardId,
                             @RequestPart("file") MultipartFile file,
-                            HttpSession session,
+                            @LoginMember MemberLoginInfo loginInfo,
                             BoardInfo boardInfo) throws Exception {
 
-        MemberLoginInfo loginInfo = (MemberLoginInfo) session
-                .getAttribute("memberInfo");
 
         Board findBoard = boardService.findBoardById(boardId);
 
@@ -178,6 +169,7 @@ public class BoardController {
     //게시글 삭제
     @PostMapping("/board/{id}/delete")
     public String deleteBoard(@PathVariable("id")Long boardId)  {
+
         Board findBoard = boardService.findBoardById(boardId);
 
         fileService.deleteFile(findBoard.getImgPath());
@@ -216,7 +208,8 @@ public class BoardController {
      */
     @GetMapping("/boards")
     public String bulletinBoard(Pageable pageable,
-                                @ModelAttribute("searchCondition") BoardSearchCondition searchCondition,
+                                @ModelAttribute("searchCondition")
+                                        BoardSearchCondition searchCondition,
                                 Model model) {
 
         Page<BulletinBoardInfo> boardPage = boardService.searchBoardList(pageable, searchCondition);
@@ -229,9 +222,10 @@ public class BoardController {
 
 
     @GetMapping("/boards/write")
-    public String bulletinBoardWrite(HttpSession session) {
+    public String bulletinBoardWrite(@LoginMember MemberLoginInfo loginInfo) {
+
         //로그인 되있을경우
-        if(session.getAttribute("memberInfo") != null) {
+        if(loginInfo != null) {
            return "redirect:/board/new";
         }
 
