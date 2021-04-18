@@ -38,4 +38,5 @@ out/
 
 ### custom ###
 src/main/resources/static/boardImgs/
-
+src/main/resources/application.yml
+src/test/resources/application.yml
