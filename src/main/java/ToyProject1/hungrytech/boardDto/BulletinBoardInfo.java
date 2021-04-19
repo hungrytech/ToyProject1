@@ -1,6 +1,6 @@
 package ToyProject1.hungrytech.boardDto;
 
-import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.domain.board.Board;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;
 import lombok.Getter;

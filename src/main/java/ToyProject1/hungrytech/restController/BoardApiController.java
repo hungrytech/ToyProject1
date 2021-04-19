@@ -2,7 +2,7 @@ package ToyProject1.hungrytech.restController;
 
 import ToyProject1.hungrytech.boardcommentDto.BoardCommentForm;
 import ToyProject1.hungrytech.boardcommentDto.BoardCommentInfo;
-import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
+import ToyProject1.hungrytech.domain.boardcomment.BoardComment;
 import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.file.FileService;
 import lombok.RequiredArgsConstructor;

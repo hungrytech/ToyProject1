@@ -1,7 +1,7 @@
 package ToyProject1.hungrytech.service.board;
 
 import ToyProject1.hungrytech.boardcommentDto.BoardCommentForm;
-import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
+import ToyProject1.hungrytech.domain.boardcomment.BoardComment;
 
 public interface BoardCommentService {
 

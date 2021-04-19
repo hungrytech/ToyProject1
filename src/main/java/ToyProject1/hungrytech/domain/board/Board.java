@@ -1,9 +1,9 @@
-package ToyProject1.hungrytech.entity.board;
+package ToyProject1.hungrytech.domain.board;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
-import ToyProject1.hungrytech.entity.BaseEntity;
-import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
-import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.domain.BaseEntity;
+import ToyProject1.hungrytech.domain.boardcomment.BoardComment;
+import ToyProject1.hungrytech.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -2,9 +2,9 @@ package ToyProject1.hungrytech.service.board;
 
 import ToyProject1.hungrytech.boardDto.BoardForm;
 import ToyProject1.hungrytech.boardcommentDto.BoardCommentForm;
-import ToyProject1.hungrytech.entity.board.Board;
-import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
-import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.domain.board.Board;
+import ToyProject1.hungrytech.domain.boardcomment.BoardComment;
+import ToyProject1.hungrytech.domain.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.service.member.MemberService;
 import org.junit.jupiter.api.BeforeEach;

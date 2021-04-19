@@ -3,7 +3,7 @@ package ToyProject1.hungrytech.repository.custom;
 import ToyProject1.hungrytech.boardDto.BoardSearchCondition;
 import ToyProject1.hungrytech.boardDto.BulletinBoardInfo;
 import ToyProject1.hungrytech.boardDto.QBulletinBoardInfo;
-import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.domain.board.Board;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,8 +14,8 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
-import static ToyProject1.hungrytech.entity.board.QBoard.*;
-import static ToyProject1.hungrytech.entity.member.QMember.*;
+import static ToyProject1.hungrytech.domain.board.QBoard.*;
+import static ToyProject1.hungrytech.domain.member.QMember.*;
 import static org.springframework.util.StringUtils.*;
 
 @RequiredArgsConstructor

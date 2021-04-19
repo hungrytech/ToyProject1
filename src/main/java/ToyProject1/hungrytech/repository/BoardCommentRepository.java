@@ -1,6 +1,6 @@
 package ToyProject1.hungrytech.repository;
 
-import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
+import ToyProject1.hungrytech.domain.boardcomment.BoardComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

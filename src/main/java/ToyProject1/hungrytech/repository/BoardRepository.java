@@ -1,6 +1,6 @@
 package ToyProject1.hungrytech.repository;
 
-import ToyProject1.hungrytech.entity.board.Board;
+import ToyProject1.hungrytech.domain.board.Board;
 import ToyProject1.hungrytech.repository.custom.BoardRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

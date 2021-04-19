@@ -1,6 +1,6 @@
 package ToyProject1.hungrytech.boardcommentDto;
 
-import ToyProject1.hungrytech.entity.boardcomment.BoardComment;
+import ToyProject1.hungrytech.domain.boardcomment.BoardComment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

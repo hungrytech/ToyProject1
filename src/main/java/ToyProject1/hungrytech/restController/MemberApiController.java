@@ -1,6 +1,6 @@
 package ToyProject1.hungrytech.restController;
 
-import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.domain.member.Member;
 import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

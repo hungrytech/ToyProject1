@@ -1,4 +1,4 @@
-package ToyProject1.hungrytech.entity;
+package ToyProject1.hungrytech.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

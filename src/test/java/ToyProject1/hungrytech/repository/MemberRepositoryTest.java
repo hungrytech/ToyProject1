@@ -1,6 +1,6 @@
 package ToyProject1.hungrytech.repository;
 
-import ToyProject1.hungrytech.entity.member.Member;
+import ToyProject1.hungrytech.domain.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
 import org.junit.jupiter.api.BeforeEach;
