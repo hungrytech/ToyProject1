@@ -35,18 +35,22 @@ public class Member extends BaseEntity {
     @Column(name = "phone_number", nullable = false, length = 13)
     private String phoneNumber;
 
+    @Column(nullable = false)
+    private String authority;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Board> boards= new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<BoardComment> boardComments = new ArrayList<>();
 
-    public Member(String name, String accountId, String accountPw, String email, String phoneNumber) {
+    public Member(String name, String accountId, String accountPw, String email, String phoneNumber, String authority) {
         this.name = name;
         this.accountId = accountId;
         this.accountPw = accountPw;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.authority = authority;
     }
 
 
@@ -56,7 +60,8 @@ public class Member extends BaseEntity {
                 memberForm.getAccountId(),
                 memberForm.getAccountPw(),
                 memberForm.getEmail(),
-                memberForm.getPhoneNumber());
+                memberForm.getPhoneNumber(),
+                "ROLE_USER");
     }
 
     /**
