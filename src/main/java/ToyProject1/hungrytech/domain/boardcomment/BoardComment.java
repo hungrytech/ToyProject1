@@ -11,12 +11,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@SequenceGenerator(name = "Comment_SEQ", sequenceName = "BoardComment_SEQ")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BoardComment extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Comment_SEQ")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_comment_id")
     private Long id;
 
