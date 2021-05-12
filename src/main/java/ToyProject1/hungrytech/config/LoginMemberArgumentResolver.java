@@ -1,8 +1,13 @@
 package ToyProject1.hungrytech.config;
 
+import ToyProject1.hungrytech.domain.member.Member;
 import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
+import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -34,6 +39,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
 
-       return httpSession.getAttribute("memberInfo");
+        return httpSession.getAttribute("memberInfo");
     }
 }

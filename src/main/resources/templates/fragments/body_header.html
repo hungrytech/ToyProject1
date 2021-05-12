@@ -16,17 +16,17 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li th:if="${session.memberInfo == null}" class="nav-item active">
-                <a class="nav-link" href="/loginForm"
+                <a class="nav-link" th:href="@{/login}"
                 >로그인 <span class="sr-only">(current)</span></a
                 >
             </li>
             <li th:if="${session.memberInfo == null}" class="nav-item active">
-                <a class="nav-link" href="/member/new"
+                <a class="nav-link" th:href="@{/member/new}"
                 >회원가입 <span class="sr-only">(current)</span></a
                 >
             </li>
             <li th:unless="${session.memberInfo == null}" class="nav-item active">
-                <a class="nav-link" href="/logoutPage"
+                <a class="nav-link" th:href="@{/logout}"
                 >로그아웃 <span class="sr-only">(current)</span></a
                 >
             </li>
@@ -36,7 +36,7 @@
                    th:href="@{/boards}"
                 >게시판</a>
             </li>
-            <li th:unless="${session.size()==0}" class="nav-item">
+            <li th:unless="${session.memberInfo == null}" class="nav-item">
                 <a class="nav-link" th:href="@{/member/{id}/edit(id=${session.memberInfo.accountId})}">Mypage</a>
             </li>
         </ul>
