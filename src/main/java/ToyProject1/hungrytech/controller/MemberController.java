@@ -3,6 +3,7 @@ package ToyProject1.hungrytech.controller;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.domain.board.Board;
 import ToyProject1.hungrytech.domain.member.Member;
+import ToyProject1.hungrytech.domain.member.Oauth;
 import ToyProject1.hungrytech.memberDto.MemberFindAccountIdForm;
 import ToyProject1.hungrytech.memberDto.MemberFindAccountPwForm;
 import ToyProject1.hungrytech.memberDto.MemberForm;
@@ -60,6 +61,7 @@ public class MemberController {
 
     @PostMapping("/member/new")
     public String join_pro(MemberForm memberForm) {
+        memberForm.setOauth(Oauth.NONE);
         memberService.join(memberForm);
         return "join/join_success";
     }
@@ -133,7 +135,8 @@ public class MemberController {
                 findMember.getName(),
                 findMember.getAccountId(),
                 findMember.getEmail(),
-                findMember.getPhoneNumber());
+                findMember.getPhoneNumber(),
+                findMember.getOauth());
     }
 
     /**
@@ -210,7 +213,8 @@ public class MemberController {
                 member.getName(),
                 member.getAccountId(),
                 member.getEmail(),
-                member.getPhoneNumber());
+                member.getPhoneNumber(),
+                member.getOauth());
 
     }
 

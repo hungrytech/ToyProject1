@@ -50,4 +50,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                                          @Param("email")
                                                  String email);
 
+    //oauth 로그인
+    Optional<Member> findMemberByemail(@Param("email")String email);
+
 }

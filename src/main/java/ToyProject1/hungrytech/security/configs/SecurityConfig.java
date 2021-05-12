@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -22,6 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     private final AuthenticationFailureHandler customAuthenticationFailureHandler;
+
+    private final OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider);
@@ -44,18 +50,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/member/**/edit", "/member/**/delete").hasRole("USER")
                 .antMatchers("/board/new", "/board/**/edit", "/board/**/delete").hasRole("USER")
                 .antMatchers("/boardComment/**").hasRole("USER")
-                .antMatchers("/board/**").permitAll()
+                .antMatchers("/board/write").hasRole("USER")
+                .antMatchers("/board/**", "/api/v1/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin() // 로그인
+                .formLogin()    // 로그인
                 .loginPage("/login")
                 .loginProcessingUrl("/member/login")
+                .defaultSuccessUrl("/")
                 .successHandler(customAuthenticationSuccessHandler)
                 .failureHandler(customAuthenticationFailureHandler)
                 .permitAll()
                 .and()
                 .logout()
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
+
 
 
     }
