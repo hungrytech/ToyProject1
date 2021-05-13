@@ -31,33 +31,65 @@ public class OAuthAttributes {
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
-
-        return ofNaver("id", attributes);
+        if(registrationId.equals("naver")) {
+            return ofNaver("id", attributes);
+        }
+        return ofKakao("id", attributes);
     }
 
-    public Member toEntity() {
+
+
+    public Member toEntity(String phoneNumber) {
+
         MemberForm memberForm = new MemberForm();
         memberForm.setName(name);
         memberForm.setAccountId(extractAccountId(email));
         memberForm.setAccountPw(name + "oauth");
         memberForm.setEmail(email);
         memberForm.setPhoneNumber(phoneNumber);
-        memberForm.setOauth(Oauth.NAVER);
+
+        if(phoneNumber.equals("kakao")){
+            memberForm.setOauth(Oauth.KAKAO);
+        }else {
+            memberForm.setOauth(Oauth.NAVER);
+        }
 
         return Member.createMember(memberForm);
     }
 
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
-        String nickname = (String) response.get("nickname");
-        System.out.println("nickname = " + nickname);
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
-                .nickName((String) response.get("nickname"))
+                .nickName("")
                 .email((String) response.get("email"))
                 .attributes(response)
                 .phoneNumber((String) response.get("mobile"))
                 .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+
+        //이메일 동의를 하지 않을경우.
+        String email = null;
+
+        if(kakaoAccount.get("email") == null) {
+            email = "이메일 등록을 해주세요.";
+        }else {
+            email = (String) kakaoAccount.get("email");
+        }
+
+        //카카오는 사업자 등록증이 없으면 핸드폰번호를 반환하지 않는다.
+        return OAuthAttributes.builder()
+                .name((String) profile.get("nickname"))
+                .nickName((String) profile.get("nickname"))
+                .email((String) kakaoAccount.get("email"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .phoneNumber("kakao")
                 .build();
     }
 

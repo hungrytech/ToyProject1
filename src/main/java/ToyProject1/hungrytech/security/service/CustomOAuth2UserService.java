@@ -1,7 +1,6 @@
 package ToyProject1.hungrytech.security.service;
 
 import ToyProject1.hungrytech.domain.member.Member;
-import ToyProject1.hungrytech.domain.member.Oauth;
 import ToyProject1.hungrytech.memberDto.MemberLoginInfo;
 import ToyProject1.hungrytech.repository.MemberRepository;
 import ToyProject1.hungrytech.security.oauth.OAuthAttributes;
@@ -25,6 +24,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
@@ -52,7 +52,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private Member saveOrUpdate(OAuthAttributes attributes) {
         Member member = memberRepository.findMemberByemail(attributes.getEmail())
-                .orElse(attributes.toEntity());
+                .orElse(attributes.toEntity(attributes.getPhoneNumber()));
 
         member.changePw(passwordEncoder.encode(member.getAccountPw()));
         return memberRepository.save(member);
