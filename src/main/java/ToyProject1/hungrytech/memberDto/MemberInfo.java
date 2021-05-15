@@ -1,5 +1,6 @@
 package ToyProject1.hungrytech.memberDto;
 
+import ToyProject1.hungrytech.domain.member.Oauth;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +20,15 @@ public class MemberInfo {
 
     private String phoneNumber;
 
+    private Oauth oauth;
 
-    public MemberInfo(String name, String accountId, String email, String phoneNumber) {
+
+    public MemberInfo(String name, String accountId, String email, String phoneNumber, Oauth oauth) {
         this.name = name;
         this.accountId = accountId;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.oauth = oauth;
     }
 
 

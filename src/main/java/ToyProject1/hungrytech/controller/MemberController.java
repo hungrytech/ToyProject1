@@ -3,21 +3,26 @@ package ToyProject1.hungrytech.controller;
 import ToyProject1.hungrytech.boardDto.BoardInfo;
 import ToyProject1.hungrytech.domain.board.Board;
 import ToyProject1.hungrytech.domain.member.Member;
-import ToyProject1.hungrytech.memberDto.*;
+import ToyProject1.hungrytech.domain.member.Oauth;
+import ToyProject1.hungrytech.memberDto.MemberFindAccountIdForm;
+import ToyProject1.hungrytech.memberDto.MemberFindAccountPwForm;
+import ToyProject1.hungrytech.memberDto.MemberForm;
+import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,52 +33,20 @@ public class MemberController {
 
     private final MemberService memberService;
     private final BoardService boardService;
-    private final HttpSession session;
 
     /**
      * 로그인
-     * 로그아웃
      */
-    @GetMapping("/loginForm")
-    public String login(Model model) {
-        model.addAttribute("memberLoginForm", new MemberLoginForm());
-        return "login/login_page";
-    }
+    @GetMapping("/login")
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "exception", required = false) String exception,
+                        Model model) {
 
-    @PostMapping("/member/login")
-    public String login_pro(MemberLoginForm loginForm, Model model) {
-        Member result = memberService.login(loginForm);
-
-        //로그인 성공
-        if(result!=null) {
-
-            session.setAttribute("memberInfo",
-                    new MemberLoginInfo(result.getAccountId(), result.getName()));
-
-            return "login/login_success";
+        if(error != null && exception != null) {
+            model.addAttribute("error", error);
+            model.addAttribute("errorMessage", "아이디 혹은 암호가 올바르지 않습니다.");
         }
-
-        String loginFailMessage = "아이디 혹은 암호가 올바르지 않습니다.";
-        model.addAttribute("failMessage", loginFailMessage);
-
-        //id 저장 처리
-        if(loginForm.isSaveId()) {
-            loginForm.setAccountPw("");
-            return "login/login_page";
-        }
-
-        //id 저장체크를 하지 않았을 때
-        loginForm.setAccountId("");
-        loginForm.setAccountPw("");
         return "login/login_page";
-
-
-    }
-
-    @GetMapping("/logoutPage")
-    public String logout() {
-        session.invalidate();
-        return "logout/logout_success";
     }
 
     /**
@@ -88,14 +61,22 @@ public class MemberController {
 
     @PostMapping("/member/new")
     public String join_pro(MemberForm memberForm) {
+        memberForm.setOauth(Oauth.NONE);
         memberService.join(memberForm);
         return "join/join_success";
     }
 
     //회원탈퇴
     @GetMapping("/member/{id}/delete")
-    public String memberDelete(@PathVariable("id") String accountId) {
-        session.invalidate();
+    public String memberDelete(@PathVariable("id") String accountId,
+                               HttpServletRequest request, HttpServletResponse response) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
         memberService.withDrawal(accountId);
         return "withDrawal/withDrawal_success";
     }
@@ -154,7 +135,8 @@ public class MemberController {
                 findMember.getName(),
                 findMember.getAccountId(),
                 findMember.getEmail(),
-                findMember.getPhoneNumber());
+                findMember.getPhoneNumber(),
+                findMember.getOauth());
     }
 
     /**
@@ -231,7 +213,8 @@ public class MemberController {
                 member.getName(),
                 member.getAccountId(),
                 member.getEmail(),
-                member.getPhoneNumber());
+                member.getPhoneNumber(),
+                member.getOauth());
 
     }
 

@@ -25,7 +25,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     /**
      * 회원 아이디를 이용하여 회원정보 조회
-     * 로그인 된 회원만 사용
+     * 로그인 하려는 회원 사용
      */
     Member findMemberByAccountId(@Param("accountId") String accountId);
 
@@ -34,7 +34,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
      * 아이디 찾기
      * 비밀번호 찾기
      */
-
     @Query("select m from Member m where m.name =:name and m.email =:email")
     Optional<Member> findMemberAccountId(@Param("name")
                                             String name,
@@ -50,5 +49,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                                                  String name,
                                          @Param("email")
                                                  String email);
+
+    //oauth 로그인
+    Optional<Member> findMemberByemail(@Param("email")String email);
 
 }

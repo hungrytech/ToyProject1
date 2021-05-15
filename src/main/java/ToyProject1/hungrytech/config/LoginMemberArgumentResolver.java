@@ -34,6 +34,6 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
 
-       return httpSession.getAttribute("memberInfo");
+        return httpSession.getAttribute("memberInfo");
     }
 }

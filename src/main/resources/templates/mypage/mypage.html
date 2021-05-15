@@ -147,7 +147,8 @@
                                     <div class="w-100"></div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col">
+                                    <div th:if="${memberInfo.oauth.toString().equals('NONE')}"
+                                         class="form-group col">
                                         <label th:for="accountPw">password</label>
                                         <input
                                                 type="password"
@@ -163,6 +164,8 @@
                                     <div class="form-group col">
                                         <label th:for="name">name</label>
                                         <input
+                                                th:readonly="${!(memberInfo.oauth.toString().equals('NONE')
+                                                || memberInfo.oauth.toString().equals('KAKAO'))}"
                                                 type="text"
                                                 class="form-control"
                                                 th:field="*{name}"
@@ -175,6 +178,7 @@
                                     <div class="form-group col">
                                         <label th:for="email">email</label>
                                         <input
+                                                th:readonly="${!memberInfo.oauth.toString().equals('NONE')}"
                                                 type="text"
                                                 class="form-control"
                                                 th:field="*{email}"
@@ -186,6 +190,8 @@
                                 <div class="form-group">
                                     <label th:for="phoneNumber">phonenumber</label>
                                     <input
+                                            th:readonly="${!(memberInfo.oauth.toString().equals('NONE')
+                                            || memberInfo.oauth.toString().equals('KAKAO'))}"
                                             type="text"
                                             class="form-control"
                                             th:field="*{phoneNumber}"
@@ -194,7 +200,8 @@
                                             onkeyup="inputPhoneNumber(this);"
                                     />
                                 </div>
-                                <button type="submit" class="btn btn-primary">
+                                <button th:if="${memberInfo.oauth.toString().equals('NONE') || memberInfo.oauth.toString().equals('KAKAO')}"
+                                        type="submit" class="btn btn-primary">
                                     회원정보 변경
                                 </button>
                                 <a class="btn btn-outline-danger"
