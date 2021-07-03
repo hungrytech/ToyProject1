@@ -61,7 +61,6 @@ public class MemberController {
 
     @PostMapping("/member/new")
     public String join_pro(MemberForm memberForm) {
-        memberForm.setOauth(Oauth.NONE);
         memberService.join(memberForm);
         return "join/join_success";
     }

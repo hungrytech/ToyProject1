@@ -1,6 +1,7 @@
 package ToyProject1.hungrytech.service.member;
 
 import ToyProject1.hungrytech.domain.member.Member;
+import ToyProject1.hungrytech.domain.member.Oauth;
 import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
@@ -31,6 +32,10 @@ public class MemberJpaService implements MemberService {
     @Override
     public void join(MemberForm memberForm) {
         memberForm.setAccountPw(passwordEncoder.encode(memberForm.getAccountPw()));
+
+        //Oauth none 처리
+        memberForm.setOauth(Oauth.NONE);
+
         memberRepository.save(Member
                 .createMember(memberForm));
 
