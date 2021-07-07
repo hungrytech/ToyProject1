@@ -17,10 +17,7 @@ public class MemberApiController {
 
     @GetMapping("/member/checkIdExist/{id}")
     public String checkIdExist(@PathVariable("id") String accountId) {
-        Optional<Member> findMember = memberService.checkId(accountId);
-        if(findMember.isPresent()) {
-            return true+"";
-        }
-        return false+"";
+        boolean result = memberService.checkIdDuplication(accountId);
+        return String.valueOf(result);
     }
 }

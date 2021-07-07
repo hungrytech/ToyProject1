@@ -59,7 +59,6 @@ public class Member extends BaseEntity {
     }
 
 
-
     public static Member createMember(MemberForm memberForm) {
         return new Member(memberForm.getName(),
                 memberForm.getAccountId(),
@@ -74,6 +73,10 @@ public class Member extends BaseEntity {
      * Entity 정보변경
      */
     public void changePw(String changePw) {
+        if (changePw.equals(this.accountPw)) {
+            throw new IllegalStateException("기존 비밀번호랑 같을 수 없습니다.");
+        }
+
         accountPw = changePw;
     }
 

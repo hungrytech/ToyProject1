@@ -16,7 +16,7 @@ public interface MemberService {
     void join(MemberForm memberForm);
 
     //아이디 증복 조회
-    Optional<Member> checkId(String accountId);
+    boolean checkIdDuplication(String accountId);
 
 
     //회원 탈퇴
@@ -33,7 +33,7 @@ public interface MemberService {
      * MyPage
      */
     //회원 정보 조회
-    Member findInfo(String accountId);
+    MemberInfo findInfo(String accountId);
 
 
     //회원 정보 변경
@@ -45,5 +45,5 @@ public interface MemberService {
      */
     String findMemberAccountId(String name, String email);
 
-    Member findMemberAccountPw(String accountId, String name, String email);
+    MemberInfo findMemberAccountPw(String accountId, String name, String email);
 }

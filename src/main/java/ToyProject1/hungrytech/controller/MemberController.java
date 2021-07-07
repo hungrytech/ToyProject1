@@ -10,6 +10,7 @@ import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.service.board.BoardService;
 import ToyProject1.hungrytech.service.member.MemberService;
+import converter.MemberConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -94,9 +95,9 @@ public class MemberController {
 
         if(boardPage.getContent().size() == 0) {
 
-            Member findMember = memberService.findInfo(accountId);
+            MemberInfo findMemberInfo = memberService.findInfo(accountId);
 
-            model.addAttribute("memberInfo", createMemberInfo(findMember));
+            model.addAttribute("memberInfo", findMemberInfo);
             model.addAttribute("boards", getBoards(boardPage));
             return "mypage/mypage";
         }
@@ -106,7 +107,9 @@ public class MemberController {
                 .get(0)
                 .getMember();
 
-        model.addAttribute("memberInfo", createMemberInfo(findMember));
+        MemberConverter memberConverter = new MemberConverter();
+
+        model.addAttribute("memberInfo", memberConverter.convertMemberToMemberInfo(findMember));
         model.addAttribute("boards", getBoards(boardPage));
         model.addAttribute("boardPage", boardPage);
         return "mypage/mypage";
@@ -188,34 +191,24 @@ public class MemberController {
         if(result.hasErrors()) {
             return "findaccountpw/find_account_pw";
         }
-        Member findMember = memberService.findMemberAccountPw(
+        MemberInfo findMemberInfo = memberService.findMemberAccountPw(
                 accountPwForm.getAccountId(),
                 accountPwForm.getName(),
                 accountPwForm.getEmail());
 
         //해당 회원이 없을경우
-        if(findMember == null) {
+        if(findMemberInfo == null) {
             String failMessage = "해당 회원을 찾을 수 없습니다.";
             model.addAttribute("failMessage", failMessage);
             return "findaccountpw/find_account_pw_fail";
         }
 
-        model.addAttribute("memberInfo", changeMemberInfo(findMember));
+        model.addAttribute("memberInfo", findMemberInfo);
 
         return "findaccountpw/change_account_pw";
     }
 
 
-    private MemberInfo changeMemberInfo(Member member) {
-
-        return new MemberInfo(
-                member.getName(),
-                member.getAccountId(),
-                member.getEmail(),
-                member.getPhoneNumber(),
-                member.getOauth());
-
-    }
 
     //비밀번호변경
     @PostMapping("/find/accountPw/change")

@@ -6,6 +6,7 @@ import ToyProject1.hungrytech.memberDto.MemberForm;
 import ToyProject1.hungrytech.memberDto.MemberInfo;
 import ToyProject1.hungrytech.memberDto.MemberLoginForm;
 import ToyProject1.hungrytech.repository.MemberRepository;
+import converter.MemberConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,8 +43,12 @@ public class MemberJpaService implements MemberService {
     }
     //아이디 증복 조회
     @Override
-    public Optional<Member> checkId(String accountId) {
-        return memberRepository.findCheckByAccountId(accountId);
+    public boolean checkIdDuplication(String accountId) {
+        Optional<Member> findMember = memberRepository.findCheckByAccountId(accountId);
+        if(findMember.isPresent()) {
+            return true;
+        }
+        return false;
     }
     
 
@@ -82,8 +87,11 @@ public class MemberJpaService implements MemberService {
      */
     //회원 정보 조회
     @Override
-    public Member findInfo(String accountId) {
-        return memberRepository.findMemberByAccountId(accountId);
+    public MemberInfo findInfo(String accountId) {
+
+        Member findMember = memberRepository.findMemberByAccountId(accountId);
+        MemberConverter memberConverter = new MemberConverter();
+        return memberConverter.convertMemberToMemberInfo(findMember);
     }
 
 
@@ -123,12 +131,13 @@ public class MemberJpaService implements MemberService {
     }
 
     @Override
-    public Member findMemberAccountPw(String accountId, String name, String email) {
+    public MemberInfo findMemberAccountPw(String accountId, String name, String email) {
 
         Optional<Member> optionalMember = memberRepository.findMemberAccountPw(accountId, name, email);
 
         if(optionalMember.isPresent()) {
-            return optionalMember.get();
+            MemberConverter memberConverter = new MemberConverter();
+            return memberConverter.convertMemberToMemberInfo(optionalMember.get());
         }
 
         return null;
